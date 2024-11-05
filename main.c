@@ -6,18 +6,18 @@
 
 typedef struct Pergunta {
     char enunciado[256];
-    char alternativas[3][100];  // 3 alternativas para a pergunta
-    char resposta;       // Letra da resposta correta ('A', 'B', 'C')
+    char alternativas[3][100];
+    char resposta;
     int tempo;
     struct Pergunta *prox;
-}Pergunta;
+} Pergunta;
 
-Pergunta* perguntaAleatoria(Pergunta* head);
+Pergunta* perguntaAleatoria(Pergunta** head);
 
 int main() {
-    srand(time(NULL));  // Inicializa a semente do gerador de números aleatórios
+    srand(time(NULL));
 
-    // perguntas fáceis(40 seg)
+    // Configuração das perguntas
     Pergunta *q1 = (Pergunta*)malloc(sizeof(Pergunta));
     strcpy(q1->enunciado, "1. Qual é a localização da Igrejinha de Piedade?");
     strcpy(q1->alternativas[0], " a) Recife");
@@ -26,8 +26,6 @@ int main() {
     q1->resposta = 'B';
     q1->tempo = 40;
     
-    Pergunta *head = q1;
-
     Pergunta *q2 = (Pergunta*)malloc(sizeof(Pergunta));
     strcpy(q2->enunciado, "2. Em que século foi fundada a Igrejinha de Piedade?");
     strcpy(q2->alternativas[0], " a) Século XVI");
@@ -36,9 +34,6 @@ int main() {
     q2->resposta = 'B';
     q2->tempo = 40;
 
-    q1->prox = q2;
-
-    // Perguntas Médias(30 seg)
     Pergunta *q3 = (Pergunta*)malloc(sizeof(Pergunta));
     strcpy(q3->enunciado, "3. Qual é o estilo arquitetônico da Igrejinha de Piedade?");
     strcpy(q3->alternativas[0], " a) Barroco");
@@ -46,8 +41,6 @@ int main() {
     strcpy(q3->alternativas[2], " c) Maneirista");
     q3->resposta = 'C';
     q3->tempo = 30;
-
-    q2->prox = q3;
 
     Pergunta *q4 = (Pergunta*)malloc(sizeof(Pergunta));
     strcpy(q4->enunciado, "4. Qual foi a doação feita por Francisco Gomes Salgueiro relacionada à igreja?");
@@ -57,8 +50,6 @@ int main() {
     q4->resposta = 'B';
     q4->tempo = 30;
 
-    q3->prox = q4;
-
     Pergunta *q5 = (Pergunta*)malloc(sizeof(Pergunta));
     strcpy(q5->enunciado, "5. Por que a Igrejinha de Piedade é considerada um ponto crítico para incidentes com tubarões?");
     strcpy(q5->alternativas[0], " a) Pela poluição da água");
@@ -67,9 +58,6 @@ int main() {
     q5->resposta = 'B';
     q5->tempo = 30;
 
-    q4->prox = q5;
-
-    //Perguntas Difíceis (30 seg)
     Pergunta *q6 = (Pergunta*)malloc(sizeof(Pergunta));
     strcpy(q6->enunciado, "6. Que medidas as autoridades têm tomado para lidar com os ataques de tubarão nas praias perto da Igrejinha de Piedade?");
     strcpy(q6->alternativas[0], " a) Limitar o acesso às praias");
@@ -77,8 +65,6 @@ int main() {
     strcpy(q6->alternativas[2], " c) Fazer estudos sobre o comportamento dos tubarões");
     q6->resposta = 'C';
     q6->tempo = 30;
-
-    q5->prox = q6;
 
     Pergunta *q7 = (Pergunta*)malloc(sizeof(Pergunta));
     strcpy(q7->enunciado, "7. Qual é a relevância da Igrejinha de Piedade no contexto histórico e social de Pernambuco?");
@@ -88,8 +74,6 @@ int main() {
     q7->resposta = 'B';
     q7->tempo = 30;
 
-    q6->prox = q7;
-
     Pergunta *q8 = (Pergunta*)malloc(sizeof(Pergunta));
     strcpy(q8->enunciado, "8. Qual foi a ação recomendada por especialistas em resposta ao aumento de ataques de tubarão em Piedade?");
     strcpy(q8->alternativas[0], " a) Construir barreiras no mar");
@@ -98,120 +82,141 @@ int main() {
     q8->resposta = 'B';
     q8->tempo = 30;
 
+    // Conecta as perguntas na lista encadeada
+    q1->prox = q2;
+    q2->prox = q3;
+    q3->prox = q4;
+    q4->prox = q5;
+    q5->prox = q6;
+    q6->prox = q7;
     q7->prox = q8;
     q8->prox = NULL;
-    
-   // Tela Inicial
-    InitWindow(800, 600, "Quiz Shark"); //desenha a janela
-    SetTargetFPS(60); // Define o FPS alvo para uma contagem de tempo mais precisa
 
-    int screen = 0;         // Variável para rastrear a tela atual
-    float timer = 0.0f;     // Contador de tempo para a mudança de tela
-    float tempoPergunta = 0.0f;
+    Pergunta *head = q1;
 
-    
-    while (!WindowShouldClose()) { // enquanto a janela estiver aberta
-        float deltaTime = GetFrameTime();  // Tempo do quadro atual
-        timer += GetFrameTime();
+    InitWindow(800, 600, "Quiz Shark");
+    SetTargetFPS(60);
 
-        // Define o tamanho dos botões
-        int buttonWidth = 200;
-        int buttonHeight = 50;
-        int spacing = 20;  // Espaço entre os botões
+    int screen = 0;
+    Pergunta *perguntaAtual = perguntaAleatoria(&head);
+    double startTime = 0.0;
+    double tempoRestante = perguntaAtual ? perguntaAtual->tempo : 0;
 
-        // Calcula a posição horizontal (x) para centralizar os botões
-        int centerX = (GetScreenWidth() - buttonWidth) / 2;
-
-        // Define as posições verticais (y) dos três botões
-        Rectangle button1 = {centerX, 150, buttonWidth, buttonHeight};
-        Rectangle button2 = {centerX, button1.y + buttonHeight + spacing, buttonWidth, buttonHeight};
-        Rectangle button3 = {centerX, button2.y + buttonHeight + spacing, buttonWidth, buttonHeight};
-
-        // Obtém a posição atual do mouse
-        Vector2 mousePosition = GetMousePosition();
-
+    while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
         if (screen == 0) {
-            DrawText("QuizSharck", 130, 220, 20, BLACK);
+            DrawText("QuizShark", 130, 220, 20, BLACK);
+            DrawText("Bem-vindo ao QuizShark! Pressione Enter para começar!", 130, 520, 20, BLACK);
 
-            // Verifica se o tempo necessário foi alcançado
-            if (timer >= 2.0f) {
-                DrawText("Bem-vindo ao QuizShark! Pressione Enter para começar!", 130, 520, 20, BLACK);
-                // Inicia o quiz ao pressionar Enter
-                if (IsKeyPressed(KEY_ENTER)) {
-                    screen = 1; 
-                }
+            if (IsKeyPressed(KEY_ENTER)) {
+                screen = 1;
+                startTime = GetTime();
+                tempoRestante = perguntaAtual ? perguntaAtual->tempo : 0;
             }
 
         } else if (screen == 1) {
-            Pergunta *perguntaAtual = perguntaAleatoria(head);
-            tempoPergunta = perguntaAtual->tempo; // inicia o temporizador
+            if (!perguntaAtual) {
+                screen = 3; // Tela de "Fim de Jogo" se não houver mais perguntas
+            } else {
+                tempoRestante = perguntaAtual->tempo - (GetTime() - startTime);
 
-            // Verifica o tempo restante para a pergunta atual
-            tempoPergunta -= deltaTime; // reduz o tempo restante com base no tempo do quadro atual.
-            if (tempoPergunta <= 0.0f) {
-                screen = 2;  // Muda para a tela de "Game Over" se o tempo acabar
-            }
-
-            DrawText(perguntaAtual->enunciado, 130, 220, 20, BLACK);
-
-            // Desenha os três botões
-            DrawRectangleRec(button1, LIGHTGRAY);
-            DrawRectangleRec(button2, LIGHTGRAY);
-            DrawRectangleRec(button3, LIGHTGRAY);
-
-            // Adiciona texto dentro de cada botão
-            // Calcula a posição do texto para centralizá-lo dentro do botão
-            DrawText(perguntaAtual->alternativas[0], button1.x + (buttonWidth - MeasureText(perguntaAtual->alternativas[0], 20)) / 2, button1.y + 15, 20, DARKGRAY);
-            DrawText(perguntaAtual->alternativas[1], button2.x + (buttonWidth - MeasureText(perguntaAtual->alternativas[1], 20)) / 2, button2.y + 15, 20, DARKGRAY);
-            DrawText(perguntaAtual->alternativas[2], button3.x + (buttonWidth - MeasureText(perguntaAtual->alternativas[2], 20)) / 2, button3.y + 15, 20, DARKGRAY);
-
-            // Verifica se um botão foi clicado e qual
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                char alternativaEscolhida;
-
-                if(CheckCollisionPointRec(mousePosition, button1)) {
-                    alternativaEscolhida = 'A';
-                }else if(CheckCollisionPointRec(mousePosition, button2)) {
-                    alternativaEscolhida = 'B';
-                }else{
-                    alternativaEscolhida = 'C';
+                if (tempoRestante <= 0.0) {
+                    screen = 2; // Muda para "Game Over" se o tempo acabar
                 }
 
-                if(alternativaEscolhida == perguntaAtual->resposta) {
-                    screen = 1;
-                    tempoPergunta = perguntaAtual->tempo; // Reinicia o temporizador
+                DrawText(perguntaAtual->enunciado, 130, 220, 20, BLACK);
+
+                Rectangle button1 = { 300, 250, 200, 50 };
+                Rectangle button2 = { 300, 310, 200, 50 };
+                Rectangle button3 = { 300, 370, 200, 50 };
+
+                DrawRectangleRec(button1, LIGHTGRAY);
+                DrawRectangleRec(button2, LIGHTGRAY);
+                DrawRectangleRec(button3, LIGHTGRAY);
+
+                DrawText(perguntaAtual->alternativas[0], button1.x + 10, button1.y + 15, 20, DARKGRAY);
+                DrawText(perguntaAtual->alternativas[1], button2.x + 10, button2.y + 15, 20, DARKGRAY);
+                DrawText(perguntaAtual->alternativas[2], button3.x + 10, button3.y + 15, 20, DARKGRAY);
+
+                Vector2 mousePosition = GetMousePosition();
+
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    char alternativaEscolhida = '\0';
+
+                    if (CheckCollisionPointRec(mousePosition, button1)) {
+                        alternativaEscolhida = 'A';
+                    } else if (CheckCollisionPointRec(mousePosition, button2)) {
+                        alternativaEscolhida = 'B';
+                    } else if (CheckCollisionPointRec(mousePosition, button3)) {
+                        alternativaEscolhida = 'C';
+                    }
+
+                    if (alternativaEscolhida == perguntaAtual->resposta) {
+                        free(perguntaAtual); // Libera a pergunta respondida
+                        perguntaAtual = perguntaAleatoria(&head);
+                        startTime = GetTime();
+                        tempoRestante = perguntaAtual ? perguntaAtual->tempo : 0;
+                    } else {
+                        screen = 2;
+                    }
                 }
+
+                char tempoTexto[32];
+                snprintf(tempoTexto, sizeof(tempoTexto), "Tempo: %.0f", tempoRestante);
+                DrawText(tempoTexto, 650, 20, 20, RED);
             }
 
-            // Exibe o tempo restante
-            char tempoTexto[32];
-            snprintf(tempoTexto, sizeof(tempoTexto), "Tempo: %.0f", tempoPergunta);
-            DrawText(tempoTexto, 650, 20, 20, RED);
-
-        }else if(screen == 2) {
+        } else if (screen == 2) {
             DrawText("Game Over!", 130, 220, 20, BLACK);
-            if (timer >= 5.0f) {
+
+            if (IsKeyPressed(KEY_ENTER)) {
                 screen = 0;
-                timer = 0.0f; // Reinicia o temporizador
+                perguntaAtual = perguntaAleatoria(&head);
+            }
+        } else if (screen == 3) {
+            DrawText("Parabéns! Você respondeu todas as perguntas!", 130, 220, 20, BLACK);
+
+            if (IsKeyPressed(KEY_ENTER)) {
+                screen = 0;
+                perguntaAtual = perguntaAleatoria(&head);
             }
         }
-        
-        EndDrawing();
 
+        EndDrawing();
     }
+
     CloseWindow();
     return 0;
 }
 
-// Função para escolher uma pergunta aleatória
-Pergunta* perguntaAleatoria(Pergunta *head) {
-    int indiceAleatorio = rand() % 8; // rand() % 8 limita os números entre 0 e 7
+// Função para escolher uma pergunta aleatória e removê-la da lista
+Pergunta* perguntaAleatoria(Pergunta **head) {
+    if (*head == NULL) return NULL; // Verifica se há perguntas restantes
+
+    int count = 0;
+    Pergunta *temp = *head;
+
+    while (temp) { // Conta o número de perguntas restantes
+        count++;
+        temp = temp->prox;
+    }
+
+    int indiceAleatorio = rand() % count;
+    Pergunta *prev = NULL;
+    temp = *head;
 
     for (int i = 0; i < indiceAleatorio; i++) {
-        head = head->prox;
+        prev = temp;
+        temp = temp->prox;
     }
-    return head;
+
+    if (prev == NULL) { // Se a pergunta é a primeira da lista
+        *head = temp->prox;
+    } else {
+        prev->prox = temp->prox;
+    }
+
+    return temp;
 }
