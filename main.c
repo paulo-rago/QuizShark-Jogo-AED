@@ -102,18 +102,18 @@ int main() {
     q8->prox = NULL;
     
    // Tela Inicial
-    int screen = 0;         // Variável para rastrear a tela atual
-    float timer = 0.0f;     // Contador de tempo para a mudança de tela
-    float changeTime = 5.0f; // Tempo (em segundos) para mudar de tela
-
+    InitWindow(800, 600, "Quiz Shark"); //desenha a janela
     SetTargetFPS(60); // Define o FPS alvo para uma contagem de tempo mais precisa
 
-    const int screenWidth = 800;
-    const int screenHeight = 600;
-    InitWindow(screenWidth, screenHeight, "Raylib basic window"); //desenha a janela
-    SetTargetFPS(60);
+    int screen = 0;         // Variável para rastrear a tela atual
+    float timer = 0.0f;     // Contador de tempo para a mudança de tela
+    float tempoPergunta = 0.0f;
 
+    
     while (!WindowShouldClose()) { // enquanto a janela estiver aberta
+        float deltaTime = GetFrameTime();  // Tempo do quadro atual
+        timer += GetFrameTime();
+
         // Define o tamanho dos botões
         int buttonWidth = 200;
         int buttonHeight = 50;
@@ -130,8 +130,6 @@ int main() {
         // Obtém a posição atual do mouse
         Vector2 mousePosition = GetMousePosition();
 
-        timer += GetFrameTime();
-
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
@@ -139,7 +137,7 @@ int main() {
             DrawText("QuizSharck", 130, 220, 20, BLACK);
 
             // Verifica se o tempo necessário foi alcançado
-            if (timer >= changeTime) {
+            if (timer >= 2.0f) {
                 DrawText("Bem-vindo ao QuizShark! Pressione Enter para começar!", 130, 520, 20, BLACK);
                 // Inicia o quiz ao pressionar Enter
                 if (IsKeyPressed(KEY_ENTER)) {
@@ -148,8 +146,14 @@ int main() {
             }
 
         } else if (screen == 1) {
-
             Pergunta *perguntaAtual = perguntaAleatoria(head);
+            tempoPergunta = perguntaAtual->tempo; // inicia o temporizador
+
+            // Verifica o tempo restante para a pergunta atual
+            tempoPergunta -= deltaTime; // reduz o tempo restante com base no tempo do quadro atual.
+            if (tempoPergunta <= 0.0f) {
+                screen = 2;  // Muda para a tela de "Game Over" se o tempo acabar
+            }
 
             DrawText(perguntaAtual->enunciado, 130, 220, 20, BLACK);
 
@@ -178,13 +182,18 @@ int main() {
 
                 if(alternativaEscolhida == perguntaAtual->resposta) {
                     screen = 1;
+                    tempoPergunta = perguntaAtual->tempo; // Reinicia o temporizador
                 }
-            }else{
-                screen = 2;
             }
+
+            // Exibe o tempo restante
+            char tempoTexto[32];
+            snprintf(tempoTexto, sizeof(tempoTexto), "Tempo: %.0f", tempoPergunta);
+            DrawText(tempoTexto, 650, 20, 20, RED);
+
         }else if(screen == 2) {
             DrawText("Game Over!", 130, 220, 20, BLACK);
-            if (timer >= changeTime) {
+            if (timer >= 5.0f) {
                 screen = 0;
                 timer = 0.0f; // Reinicia o temporizador
             }
