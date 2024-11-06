@@ -6,18 +6,26 @@
 
 typedef struct Pergunta {
     char enunciado[256];
-    char alternativas[3][100];  // 3 alternativas para a pergunta
+    char alternativas[3][256];  // 3 alternativas para a pergunta
     char resposta;       // Letra da resposta correta ('A', 'B', 'C')
     int tempo;
     struct Pergunta *prox;
-}Pergunta;
+} Pergunta;
 
 Pergunta* perguntaAleatoria(Pergunta* head);
 
 int main() {
     srand(time(NULL));  // Inicializa a semente do gerador de números aleatórios
 
-    // perguntas fáceis(40 seg)
+    // Inicializa a janela
+    InitWindow(800, 600, "QuizShark");
+    SetTargetFPS(60);
+
+    // Variáveis de controle
+    int screen = 0;
+    float timer = 0.0f;
+
+    // Criação das perguntas
     Pergunta *q1 = (Pergunta*)malloc(sizeof(Pergunta));
     strcpy(q1->enunciado, "1. Qual é a localização da Igrejinha de Piedade?");
     strcpy(q1->alternativas[0], " a) Recife");
@@ -36,7 +44,6 @@ int main() {
     q2->tempo = 40;
     q1->prox = q2;
 
-    // Perguntas Médias(30 seg)
     Pergunta *q3 = (Pergunta*)malloc(sizeof(Pergunta));
     strcpy(q3->enunciado, "3. Qual é o estilo arquitetônico da Igrejinha de Piedade?");
     strcpy(q3->alternativas[0], " a) Barroco");
@@ -47,10 +54,10 @@ int main() {
     q2->prox = q3;
 
     Pergunta *q4 = (Pergunta*)malloc(sizeof(Pergunta));
-    strcpy(q4->enunciado, "4. Qual foi a doação feita por Francisco Gomes Salgueiro relacionada à igreja?");
-    strcpy(q4->alternativas[0], " a) Um terreno");
-    strcpy(q4->alternativas[1], " b) A capela e propriedades");
-    strcpy(q4->alternativas[2], " c) Um altar");
+    strcpy(q4->enunciado, "4. Qual é a importância da Igrejinha de Piedade?");
+    strcpy(q4->alternativas[0], " a) É um ponto turístico");
+    strcpy(q4->alternativas[1], " b) É um local histórico");
+    strcpy(q4->alternativas[2], " c) Não tem importância");
     q4->resposta = 'B';
     q4->tempo = 30;
     q3->prox = q4;
@@ -64,13 +71,12 @@ int main() {
     q5->tempo = 30;
     q4->prox = q5;
 
-    //Perguntas Difíceis (30 seg)
     Pergunta *q6 = (Pergunta*)malloc(sizeof(Pergunta));
     strcpy(q6->enunciado, "6. Que medidas as autoridades têm tomado para lidar com os ataques de tubarão nas praias perto da Igrejinha de Piedade?");
-    strcpy(q6->alternativas[0], " a) Limitar o acesso às praias");
-    strcpy(q6->alternativas[1], " b) Reforçar a vigilância com drones");
-    strcpy(q6->alternativas[2], " c) Fazer estudos sobre o comportamento dos tubarões");
-    q6->resposta = 'C';
+    strcpy(q6->alternativas[0], " a) Aumentar a fiscalização");
+    strcpy(q6->alternativas[1], " b) Proibir o banho de mar");
+    strcpy(q6->alternativas[2], " c) Construir barreiras");
+    q6->resposta = 'A';
     q6->tempo = 30;
     q5->prox = q6;
 
@@ -92,88 +98,103 @@ int main() {
     q8->tempo = 30;
     q7->prox = q8;
     q8->prox = NULL;
-    
-    // Tela Inicial
-    int screen = 0;         // Variável para rastrear a tela atual
-    float timer = 0.0f;     // Contador de tempo para a mudança de tela
-    float changeTime = 5.0f; // Tempo (em segundos) para mudar de tela
-    SetTargetFPS(60); // Define o FPS alvo para uma contagem de tempo mais precisa
 
-    InitWindow(800, 600, "QuizShark"); //desenha a janela
-    SetTargetFPS(60);
-    
-    while (!WindowShouldClose()) { // enquanto a janela estiver aberta
-        // Define o tamanho dos botões
-        int buttonWidth = 200;
-        int buttonHeight = 50;
-        int spacing = 20;  // Espaço entre os botões
-        // Calcula a posição horizontal (x) para centralizar os botões
+    // Escolhe uma pergunta inicial aleatória
+    Pergunta *perguntaAtual = perguntaAleatoria(head);
+
+    // Loop principal do jogo
+        while (!WindowShouldClose()) {
+        // Define a posição e tamanho dos botões
+        int buttonWidth = 300;
+        int buttonHeight = 60;
+        int spacing = 20;
         int centerX = (GetScreenWidth() - buttonWidth) / 2;
-        // Define as posições verticais (y) dos três botões
-        Rectangle button1 = {centerX, 150, buttonWidth, buttonHeight};
-        Rectangle button2 = {centerX, button1.y + buttonHeight + spacing, buttonWidth, buttonHeight};
-        Rectangle button3 = {centerX, button2.y + buttonHeight + spacing, buttonWidth, buttonHeight};
-        // Obtém a posição atual do mouse
+
+        Rectangle button1 = {centerX, 350, buttonWidth, buttonHeight};
+        Rectangle button2 = {centerX, 350 + buttonHeight + spacing, buttonWidth, buttonHeight};
+        Rectangle button3 = {centerX, 350 + 2 * (buttonHeight + spacing), buttonWidth, buttonHeight};
+
         Vector2 mousePosition = GetMousePosition();
-        timer += GetFrameTime();
+        
         BeginDrawing();
         ClearBackground(RAYWHITE);
+
         if (screen == 0) {
-            DrawText("QuizSharck", 130, 220, 20, BLACK);
-            // Verifica se o tempo necessário foi alcançado
-            if (timer >= changeTime) {
-                DrawText("Bem-vindo ao QuizShark! Pressione Enter para começar!", 130, 520, 20, BLACK);
-                // Inicia o quiz ao pressionar Enter
-                if (IsKeyPressed(KEY_ENTER)) {
-                    screen = 1; 
-                }
+            DrawText("QuizShark", 250, 100, 40, DARKBLUE);
+            DrawText("Pressione Enter para começar!", 210, 450, 20, DARKGRAY);
+            if (IsKeyPressed(KEY_ENTER)) {
+                screen = 1;
+                perguntaAtual = perguntaAleatoria(head);
+                timer = 0.0f;
             }
         } else if (screen == 1) {
-            Pergunta *perguntaAtual = perguntaAleatoria(head);
-            DrawText(perguntaAtual->enunciado, 130, 220, 20, BLACK);
-            // Desenha os três botões
-            DrawRectangleRec(button1, LIGHTGRAY);
-            DrawRectangleRec(button2, LIGHTGRAY);
-            DrawRectangleRec(button3, LIGHTGRAY);
-            // Adiciona texto dentro de cada botão
-            // Calcula a posição do texto para centralizá-lo dentro do botão
-            DrawText(perguntaAtual->alternativas[0], button1.x + (buttonWidth - MeasureText(perguntaAtual->alternativas[0], 20)) / 2, button1.y + 15, 20, DARKGRAY);
-            DrawText(perguntaAtual->alternativas[1], button2.x + (buttonWidth - MeasureText(perguntaAtual->alternativas[1], 20)) / 2, button2.y + 15, 20, DARKGRAY);
-            DrawText(perguntaAtual->alternativas[2], button3.x + (buttonWidth - MeasureText(perguntaAtual->alternativas[2], 20)) / 2, button3.y + 15, 20, DARKGRAY);
-            // Verifica se um botão foi clicado e qual
+            // Caixa de fundo para a pergunta
+            DrawRectangle(100, 100, 600, 100, LIGHTGRAY);
+            DrawRectangleLines(100, 100, 600, 100, DARKGRAY);
+            DrawText(perguntaAtual->enunciado, 120, 130, 20, DARKBLUE);
+
+            // Botões com alternativas
+            DrawRectangleRec(button1, SKYBLUE);
+            DrawRectangleLinesEx(button1, 2, DARKGRAY);
+            DrawText(perguntaAtual->alternativas[0], button1.x + 20, button1.y + 15, 20, BLACK);
+
+            DrawRectangleRec(button2, SKYBLUE);
+            DrawRectangleLinesEx(button2, 2, DARKGRAY);
+            DrawText(perguntaAtual->alternativas[1], button2.x + 20, button2.y + 15, 20, BLACK);
+
+            DrawRectangleRec(button3, SKYBLUE);
+            DrawRectangleLinesEx(button3, 2, DARKGRAY);
+            DrawText(perguntaAtual->alternativas[2], button3.x + 20, button3.y + 15, 20, BLACK);
+
+            // Verifica a resposta
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 char alternativaEscolhida;
-                if(CheckCollisionPointRec(mousePosition, button1)) {
+                if (CheckCollisionPointRec(mousePosition, button1)) {
                     alternativaEscolhida = 'A';
-                }else if(CheckCollisionPointRec(mousePosition, button2)) {
+                } else if (CheckCollisionPointRec(mousePosition, button2)) {
                     alternativaEscolhida = 'B';
-                }else{
+                } else if (CheckCollisionPointRec(mousePosition, button3)) {
                     alternativaEscolhida = 'C';
                 }
-                if(alternativaEscolhida == perguntaAtual->resposta) {
-                    screen = 1;
+
+                if (alternativaEscolhida == perguntaAtual->resposta) {
+                    perguntaAtual = perguntaAleatoria(head); // Nova pergunta
+                } else {
+                    screen = 2;
+                    timer = 0.0f;
                 }
-            }else{
-                screen = 2;
             }
-        }else if(screen == 2) {
-            DrawText("Game Over!", 130, 220, 20, BLACK);
-            if (timer >= changeTime) {
+        } else if (screen == 2) {
+            DrawText("Game Over!", 300, 250, 40, RED);
+            DrawText("Pressione Enter para tentar novamente.", 180, 320, 20, DARKGRAY);
+            timer += GetFrameTime();
+            if (IsKeyPressed(KEY_ENTER)) {
                 screen = 0;
-                timer = 0.0f; // Reinicia o temporizador
+                timer = 0.0f;
             }
         }
-        
+
         EndDrawing();
     }
+
+    // Libera a memória das perguntas
+    Pergunta *temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->prox;
+        free(temp);
+    }
+
     CloseWindow();
     return 0;
 }
+
 // Função para escolher uma pergunta aleatória
 Pergunta* perguntaAleatoria(Pergunta *head) {
-    int indiceAleatorio = rand() % 8; // rand() % 8 limita os números entre 0 e 7
-    for (int i = 0; i < indiceAleatorio; i++) {
-        head = head->prox;
+    int indiceAleatorio = rand() % 8; // Gera um número entre 0 e 7 para escolher a pergunta
+    Pergunta *current = head;
+    for (int i = 0; i < indiceAleatorio && current->prox != NULL; i++) {
+        current = current->prox;
     }
-    return head;
+    return current;
 }
