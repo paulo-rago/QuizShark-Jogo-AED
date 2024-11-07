@@ -48,6 +48,39 @@ Pergunta* perguntaAleatoria(Pergunta *head) {
     return perguntaSelecionada;
 }
 
+void bubbleSort(Jogador ranking[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (ranking[j].tempoTotal > ranking[j + 1].tempoTotal) {
+                Jogador temp = ranking[j];
+                ranking[j] = ranking[j + 1];
+                ranking[j + 1] = temp;
+            }
+        }
+    }
+}
+
+void carregarRanking(Jogador ranking[], int *n) {
+    FILE *file = fopen("ranking.txt", "r");
+    if (file != NULL) {
+        *n = 0;
+        while (fscanf(file, "%49s - %f\n", ranking[*n].nome, &ranking[*n].tempoTotal) == 2) {
+            (*n)++;
+        }
+        fclose(file);
+    }
+}
+
+void salvarRanking(Jogador ranking[], int n) {
+    FILE *file = fopen("ranking.txt", "w");
+    if (file != NULL) {
+        for (int i = 0; i < n; i++) {
+            fprintf(file, "%s - %.2f\n", ranking[i].nome, ranking[i].tempoTotal);
+        }
+        fclose(file);
+    }
+}
+
 int main(void)
 {
     // Inicializa a janela
@@ -152,13 +185,11 @@ int main(void)
     int nomeIndex = 0;
 
     // Ranking de jogadores
-    Jogador ranking[5] = {
-        {"Jogador1", 120.0f},
-        {"Jogador2", 150.0f},
-        {"Jogador3", 180.0f},
-        {"Jogador4", 200.0f},
-        {"Jogador5", 220.0f}
-    };
+    Jogador ranking[100]; // Aumentado para suportar mais jogadores
+    int numJogadores = 0;
+
+    // Carrega o ranking do arquivo
+    carregarRanking(ranking, &numJogadores);
 
     // Loop principal do jogo
     while (!WindowShouldClose())
@@ -241,12 +272,14 @@ int main(void)
                         screen = 2; // Vai para a tela de resultados
                         todasPerguntasRespondidas = true; // Para o temporizador
 
-                        // Salva o nome do jogador e o tempo total em um arquivo de texto
-                        FILE *file = fopen("ranking.txt", "a");
-                        if (file != NULL) {
-                            fprintf(file, "%s - %.2f segundos\n", nomeJogador, totalTime);
-                            fclose(file);
-                        }
+                        // Adiciona o jogador atual ao ranking e ordena
+                        strcpy(ranking[numJogadores].nome, nomeJogador);
+                        ranking[numJogadores].tempoTotal = totalTime;
+                        numJogadores++;
+                        bubbleSort(ranking, numJogadores);
+
+                        // Salva o ranking atualizado no arquivo
+                        salvarRanking(ranking, numJogadores);
                     } else {
                         perguntaAtual = perguntaAleatoria(head);
                     }
@@ -261,7 +294,7 @@ int main(void)
 
             // Desenha o ranking
             DrawText("Ranking:", 100, 200, 20, DARKBLUE);
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < numJogadores && i < 5; i++) {
                 DrawText(TextFormat("%d. %s - %.2f segundos", i + 1, ranking[i].nome, ranking[i].tempoTotal), 100, 230 + i * 30, 20, DARKBLUE);
             }
         }
