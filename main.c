@@ -6,8 +6,8 @@
 
 typedef struct Pergunta {
     char enunciado[256];
-    char alternativas[3][256];  // 3 alternativas para a pergunta
-    char resposta;       // Letra da resposta correta ('A', 'B', 'C')
+    char alternativas[3][256]; 
+    char resposta;       
     int tempo;
     int respondida; // Novo campo para marcar se a pergunta foi respondida
     struct Pergunta *prox;
@@ -17,6 +17,39 @@ typedef struct Jogador {
     char nome[50];
     float tempoTotal;
 } Jogador;
+
+// As 5 funções de Pergunta (adicionar, liberar, pergunta aleatoria )
+
+void adicionarPergunta(Pergunta **head, const char *enunciado, const char *alt1, const char *alt2, const char *alt3, char resposta, int tempo) {
+    Pergunta *novaPergunta = (Pergunta*)malloc(sizeof(Pergunta));
+    strcpy(novaPergunta->enunciado, enunciado);
+    strcpy(novaPergunta->alternativas[0], alt1);
+    strcpy(novaPergunta->alternativas[1], alt2);
+    strcpy(novaPergunta->alternativas[2], alt3);
+    novaPergunta->resposta = resposta;
+    novaPergunta->tempo = tempo;
+    novaPergunta->respondida = 0;
+    novaPergunta->prox = NULL;
+
+    if (*head == NULL) {
+        *head = novaPergunta;
+    } else {
+        Pergunta *temp = *head;
+        while (temp->prox != NULL) {
+            temp = temp->prox;
+        }
+        temp->prox = novaPergunta;
+    }
+}
+
+void liberarPerguntas(Pergunta *head) {
+    Pergunta *temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->prox;
+        free(temp);
+    }
+}
 
 Pergunta* perguntaAleatoria(Pergunta *head) {
     Pergunta *current = head;
@@ -81,8 +114,9 @@ void salvarRanking(Jogador ranking[], int n) {
     }
 }
 
-int main(void)
-{
+
+
+int main(void) {
     // Inicializa a janela
     InitWindow(800, 600, "QuizShark");
 
@@ -90,88 +124,17 @@ int main(void)
     SetTargetFPS(60);
 
     // Criação das perguntas
-    Pergunta *q1 = (Pergunta*)malloc(sizeof(Pergunta));
-    strcpy(q1->enunciado, "1. Qual é a localização da Igrejinha de Piedade?");
-    strcpy(q1->alternativas[0], " a) Recife");
-    strcpy(q1->alternativas[1], " b) Jaboatão dos Guararapes");
-    strcpy(q1->alternativas[2], " c) Olinda");
-    q1->resposta = 'B';
-    q1->tempo = 40;
-    q1->respondida = 0; // Inicializa como não respondida
-    
-    Pergunta *head = q1;
-    Pergunta *q2 = (Pergunta*)malloc(sizeof(Pergunta));
-    strcpy(q2->enunciado, "2. Em que século foi fundada a Igrejinha de Piedade?");
-    strcpy(q2->alternativas[0], " a) Século XVI");
-    strcpy(q2->alternativas[1], " b) Século XVII");
-    strcpy(q2->alternativas[2], " c) Século XVIII");
-    q2->resposta = 'B';
-    q2->tempo = 40;
-    q2->respondida = 0; // Inicializa como não respondida
-    q1->prox = q2;
+    Pergunta *head = NULL;
+    adicionarPergunta(&head, "1. Qual é a localização da Igrejinha de Piedade?", " a) Recife", " b) Jaboatão dos Guararapes", " c) Olinda", 'B', 40);
+    adicionarPergunta(&head, "2. Em que século foi fundada a Igrejinha de Piedade?", " a) Século XVI", " b) Século XVII", " c) Século XVIII", 'B', 40);
+    adicionarPergunta(&head, "3. Qual é o estilo arquitetônico da Igrejinha de Piedade?", " a) Barroco", " b) Neoclássico", " c) Maneirista", 'C', 30);
+    adicionarPergunta(&head, "4. Qual é a importância da Igrejinha de Piedade?", " a) É um ponto turístico", " b) É um local histórico", " c) Não tem importância", 'B', 30);
+    adicionarPergunta(&head, "5. Por que a Igrejinha de Piedade é considerada um ponto crítico para incidentes com tubarões?", " a) Pela poluição da água", " b) Devido à abertura nos arrecifes", " c) Por causa da pesca excessiva", 'B', 30);
+    adicionarPergunta(&head, "6. Que medidas as autoridades têm tomado para lidar com os ataques de tubarão nas praias perto da Igrejinha de Piedade?", " a) Aumentar a fiscalização", " b) Proibir o banho de mar", " c) Construir barreiras", 'A', 30);
+    adicionarPergunta(&head, "7. Qual é a relevância da Igrejinha de Piedade no contexto histórico e social de Pernambuco?", " a) É um ponto de referência para turistas apenas", " b) Está ligada ao ciclo da cana-de-açúcar e à história colonial", " c) Não possui relevância histórica", 'B', 30);
+    adicionarPergunta(&head, "8. Qual foi a ação recomendada por especialistas em resposta ao aumento de ataques de tubarão em Piedade?", " a) Construir barreiras no mar", " b) Implantar restrições de banho em áreas de risco", " c) Organizar campanhas de conscientização", 'B', 30);
 
-    Pergunta *q3 = (Pergunta*)malloc(sizeof(Pergunta));
-    strcpy(q3->enunciado, "3. Qual é o estilo arquitetônico da Igrejinha de Piedade?");
-    strcpy(q3->alternativas[0], " a) Barroco");
-    strcpy(q3->alternativas[1], " b) Neoclássico");
-    strcpy(q3->alternativas[2], " c) Maneirista");
-    q3->resposta = 'C';
-    q3->tempo = 30;
-    q3->respondida = 0; // Inicializa como não respondida
-    q2->prox = q3;
-
-    Pergunta *q4 = (Pergunta*)malloc(sizeof(Pergunta));
-    strcpy(q4->enunciado, "4. Qual é a importância da Igrejinha de Piedade?");
-    strcpy(q4->alternativas[0], " a) É um ponto turístico");
-    strcpy(q4->alternativas[1], " b) É um local histórico");
-    strcpy(q4->alternativas[2], " c) Não tem importância");
-    q4->resposta = 'B';
-    q4->tempo = 30;
-    q4->respondida = 0; // Inicializa como não respondida
-    q3->prox = q4;
-
-    Pergunta *q5 = (Pergunta*)malloc(sizeof(Pergunta));
-    strcpy(q5->enunciado, "5. Por que a Igrejinha de Piedade é considerada um ponto crítico para incidentes com tubarões?");
-    strcpy(q5->alternativas[0], " a) Pela poluição da água");
-    strcpy(q5->alternativas[1], " b) Devido à abertura nos arrecifes");
-    strcpy(q5->alternativas[2], " c) Por causa da pesca excessiva");
-    q5->resposta = 'B';
-    q5->tempo = 30;
-    q5->respondida = 0; // Inicializa como não respondida
-    q4->prox = q5;
-
-    Pergunta *q6 = (Pergunta*)malloc(sizeof(Pergunta));
-    strcpy(q6->enunciado, "6. Que medidas as autoridades têm tomado para lidar com os ataques de tubarão nas praias perto da Igrejinha de Piedade?");
-    strcpy(q6->alternativas[0], " a) Aumentar a fiscalização");
-    strcpy(q6->alternativas[1], " b) Proibir o banho de mar");
-    strcpy(q6->alternativas[2], " c) Construir barreiras");
-    q6->resposta = 'A';
-    q6->tempo = 30;
-    q6->respondida = 0; // Inicializa como não respondida
-    q5->prox = q6;
-
-    Pergunta *q7 = (Pergunta*)malloc(sizeof(Pergunta));
-    strcpy(q7->enunciado, "7. Qual é a relevância da Igrejinha de Piedade no contexto histórico e social de Pernambuco?");
-    strcpy(q7->alternativas[0], " a) É um ponto de referência para turistas apenas");
-    strcpy(q7->alternativas[1], " b) Está ligada ao ciclo da cana-de-açúcar e à história colonial");
-    strcpy(q7->alternativas[2], " c) Não possui relevância histórica");
-    q7->resposta = 'B';
-    q7->tempo = 30;
-    q7->respondida = 0; // Inicializa como não respondida
-    q6->prox = q7;
-
-    Pergunta *q8 = (Pergunta*)malloc(sizeof(Pergunta));
-    strcpy(q8->enunciado, "8. Qual foi a ação recomendada por especialistas em resposta ao aumento de ataques de tubarão em Piedade?");
-    strcpy(q8->alternativas[0], " a) Construir barreiras no mar");
-    strcpy(q8->alternativas[1], " b) Implantar restrições de banho em áreas de risco");
-    strcpy(q8->alternativas[2], " c) Organizar campanhas de conscientização");
-    q8->resposta = 'B';
-    q8->tempo = 30;
-    q8->respondida = 0; // Inicializa como não respondida
-    q7->prox = q8;
-    q8->prox = NULL;
-
-    Pergunta *perguntaAtual = q1;
+    Pergunta *perguntaAtual = head;
 
     // Variáveis de tela e tempo
     int screen = 0;
@@ -192,8 +155,7 @@ int main(void)
     carregarRanking(ranking, &numJogadores);
 
     // Loop principal do jogo
-    while (!WindowShouldClose())
-    {
+    while (!WindowShouldClose()) {
         // Atualiza o timer
         if (!todasPerguntasRespondidas) {
             timer += GetFrameTime();
@@ -205,18 +167,15 @@ int main(void)
         ClearBackground(RAYWHITE);
 
         // Desenha conteúdo baseado na tela atual
-        if (screen == 0)
-        {
+        if (screen == 0) {
             DrawText("Digite seu nome:", 250, 100, 40, DARKBLUE);
             DrawText(nomeJogador, 250, 200, 40, DARKBLUE);
             DrawText("Pressione Enter para começar!", 210, 450, 20, DARKGRAY);
 
             // Captura a entrada do teclado para o nome do jogador
             int key = GetCharPressed();
-            while (key > 0)
-            {
-                if ((key >= 32) && (key <= 125) && (nomeIndex < 49))
-                {
+            while (key > 0) {
+                if ((key >= 32) && (key <= 125) && (nomeIndex < 49)) {
                     nomeJogador[nomeIndex] = (char)key;
                     nomeIndex++;
                     nomeJogador[nomeIndex] = '\0';
@@ -224,8 +183,7 @@ int main(void)
                 key = GetCharPressed();
             }
 
-            if (IsKeyPressed(KEY_BACKSPACE) && nomeIndex > 0)
-            {
+            if (IsKeyPressed(KEY_BACKSPACE) && nomeIndex > 0) {
                 nomeIndex--;
                 nomeJogador[nomeIndex] = '\0';
             }
@@ -235,9 +193,7 @@ int main(void)
                 perguntaAtual = perguntaAleatoria(head);
                 timer = 0.0f;
             }
-        }
-        else if (screen == 1)
-        {
+        } else if (screen == 1) {
             // Caixa de fundo para a pergunta
             DrawRectangle(100, 100, 600, 100, LIGHTGRAY);
             DrawRectangleLines(100, 100, 600, 100, DARKGRAY);
@@ -261,11 +217,9 @@ int main(void)
             DrawText(perguntaAtual->alternativas[2], button3.x + 20, button3.y + 15, 20, BLACK);
 
             // Lógica para marcar a pergunta como respondida e passar para a próxima
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-            {
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 Vector2 mousePoint = GetMousePosition();
-                if (CheckCollisionPointRec(mousePoint, button1) || CheckCollisionPointRec(mousePoint, button2) || CheckCollisionPointRec(mousePoint, button3))
-                {
+                if (CheckCollisionPointRec(mousePoint, button1) || CheckCollisionPointRec(mousePoint, button2) || CheckCollisionPointRec(mousePoint, button3)) {
                     perguntaAtual->respondida = 1; // Marca a pergunta como respondida
                     perguntasRespondidas++;
                     if (perguntasRespondidas == 8) {
@@ -286,8 +240,7 @@ int main(void)
                 }
             }
         }
-        else if (screen == 2)
-        {
+        else if (screen == 2) {
             // Tela de resultados
             DrawText("Parabéns! Você respondeu todas as perguntas.", 100, 100, 20, DARKBLUE);
             DrawText(TextFormat("Tempo total: %.2f segundos", totalTime), 100, 150, 20, DARKBLUE);
@@ -299,9 +252,11 @@ int main(void)
             }
         }
 
-        // Finaliza o desenho
         EndDrawing();
     }
+
+    // Libera a memória alocada para as perguntas
+    liberarPerguntas(head);
 
     // Fecha a janela e limpa os recursos
     CloseWindow();
