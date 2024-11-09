@@ -18,6 +18,10 @@ typedef struct Jogador {
     float tempoTotal;
 } Jogador;
 
+typedef struct Vida {
+    struct Vida *prox;
+} Vida;
+
 // As 5 funções de Pergunta (adicionar, liberar, pergunta aleatoria )
 
 void adicionarPergunta(Pergunta **head, const char *enunciado, const char *alt1, const char *alt2, const char *alt3, char resposta, int tempo) {
@@ -44,6 +48,38 @@ void adicionarPergunta(Pergunta **head, const char *enunciado, const char *alt1,
 
 void liberarPerguntas(Pergunta *head) {
     Pergunta *temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->prox;
+        free(temp);
+    }
+}
+
+void adicionarVida(Vida **head) {
+    Vida *novaVida = (Vida*)malloc(sizeof(Vida));
+    novaVida->prox = *head;
+    *head = novaVida;
+}
+
+void removerVida(Vida **head) {
+    if (*head != NULL) {
+        Vida *temp = *head;
+        *head = (*head)->prox;
+        free(temp);
+    }
+}
+
+int contarVidas(Vida *head) {
+    int count = 0;
+    while (head != NULL) {
+        count++;
+        head = head->prox;
+    }
+    return count;
+}
+
+void liberarVidas(Vida *head) {
+    Vida *temp;
     while (head != NULL) {
         temp = head;
         head = head->prox;
@@ -154,6 +190,12 @@ int main(void) {
     // Carrega o ranking do arquivo
     carregarRanking(ranking, &numJogadores);
 
+    // Lista encadeada de vidas
+    Vida *vidas = NULL;
+    for (int i = 0; i < 3; i++) {
+        adicionarVida(&vidas);
+    }
+
     // Loop principal do jogo
     while (!WindowShouldClose()) {
         // Atualiza o timer
@@ -216,10 +258,28 @@ int main(void) {
             DrawRectangleLinesEx(button3, 2, DARKGRAY);
             DrawText(perguntaAtual->alternativas[2], button3.x + 20, button3.y + 15, 20, BLACK);
 
+            // Desenha as vidas restantes
+            int vidasRestantes = contarVidas(vidas);
+            for (int i = 0; i < vidasRestantes; i++) {
+                DrawText("❤️", 700 + i * 30, 20, 20, RED);
+            }
+
             // Lógica para marcar a pergunta como respondida e passar para a próxima
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 Vector2 mousePoint = GetMousePosition();
                 if (CheckCollisionPointRec(mousePoint, button1) || CheckCollisionPointRec(mousePoint, button2) || CheckCollisionPointRec(mousePoint, button3)) {
+                    char respostaSelecionada;
+                    if (CheckCollisionPointRec(mousePoint, button1)) respostaSelecionada = 'A';
+                    else if (CheckCollisionPointRec(mousePoint, button2)) respostaSelecionada = 'B';
+                    else respostaSelecionada = 'C';
+
+                    if (respostaSelecionada != perguntaAtual->resposta) {
+                        removerVida(&vidas);
+                        if (contarVidas(vidas) == 0) {
+                            screen = 3; // Vai para a tela de game over
+                        }
+                    }
+
                     perguntaAtual->respondida = 1; // Marca a pergunta como respondida
                     perguntasRespondidas++;
                     if (perguntasRespondidas == 8) {
@@ -251,12 +311,32 @@ int main(void) {
                 DrawText(TextFormat("%d. %s - %.2f segundos", i + 1, ranking[i].nome, ranking[i].tempoTotal), 100, 230 + i * 30, 20, DARKBLUE);
             }
         }
+        else if (screen == 3) {
+            // Tela de game over
+            DrawText("Game Over! Você perdeu todas as suas vidas.", 100, 100, 20, DARKBLUE);
+            DrawText(TextFormat("Tempo total: %.2f segundos", totalTime), 100, 150, 20, DARKBLUE);
+
+            // Desenha o ranking
+            DrawText("Ranking:", 100, 200, 20, DARKBLUE);
+            for (int i = 0; i < numJogadores && i < 5; i++) {
+                DrawText(TextFormat("%d. %s - %.2f segundos", i + 1, ranking[i].nome, ranking[i].tempoTotal), 100, 230 + i * 30, 20, DARKBLUE);
+            }
+
+            DrawText("Pressione Enter para sair", 100, 400, 20, DARKGRAY);
+
+            if (IsKeyPressed(KEY_ENTER)) {
+                break; // Sai do loop principal e encerra o jogo
+            }
+        }
 
         EndDrawing();
     }
 
     // Libera a memória alocada para as perguntas
     liberarPerguntas(head);
+
+    // Libera a memória das vidas
+    liberarVidas(vidas);
 
     // Fecha a janela e limpa os recursos
     CloseWindow();
