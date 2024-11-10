@@ -201,7 +201,7 @@ int main(void) {
     float timer = 0.0f;
     float totalTime = 0.0f;
     int perguntasRespondidas = 0;
-    bool todasPerguntasRespondidas = false;
+    bool jogoAcabou = false;
 
     // Variável para armazenar o nome do jogador
     char nomeJogador[50] = "";
@@ -223,7 +223,7 @@ int main(void) {
     // Loop principal do jogo
     while (!WindowShouldClose()) {
         // Atualiza o timer
-        if (!todasPerguntasRespondidas) {
+        if (!jogoAcabou) {
             timer += GetFrameTime();
             totalTime += GetFrameTime();
         }
@@ -340,6 +340,7 @@ int main(void) {
                     if (respostaSelecionada != perguntaAtual->resposta) {
                         removerVida(&vidas);
                         if (contarVidas(vidas) == 0) {
+                            jogoAcabou = true; // Para o temporizador
                             screen = 4; // Vai para a tela de game over
                         }
                     }
@@ -348,7 +349,7 @@ int main(void) {
                     perguntasRespondidas++;
                     if (perguntasRespondidas == 8) {
                         screen = 3; // Vai para a tela de resultados
-                        todasPerguntasRespondidas = true; // Para o temporizador
+                        jogoAcabou = true; // Para o temporizador
 
                         // Adiciona o jogador atual ao ranking e ordena
                         strcpy(ranking[numJogadores].nome, nomeJogador);
@@ -377,7 +378,6 @@ int main(void) {
         } else if (screen == 4) {
             // Tela de game over
             DrawText("Game Over! Você perdeu todas as suas vidas.", 100, 100, 20, DARKBLUE);
-            DrawText(TextFormat("Tempo total: %.2f segundos", totalTime), 100, 150, 20, DARKBLUE);
             DrawText("Pressione ENTER para voltar ao menu", 100, 500, 20, DARKGRAY);
 
             if (IsKeyPressed(KEY_ENTER)) {
