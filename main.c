@@ -4,6 +4,9 @@
 #include <time.h>
 #include <raylib.h>
 
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
+
 typedef struct Pergunta {
     char enunciado[256];
     char alternativas[3][256]; 
@@ -161,7 +164,7 @@ void exibirRanking(Jogador ranking[], int numJogadores) {
                  100, 100 + i * 40, 20, BLACK);
     }
 
-    DrawText("Pressione BACKSPACE para voltar ao menu", 100, 500, 20, DARKGRAY);
+    DrawText("Pressione ENTER para voltar ao menu", 100, 500, 20, DARKGRAY);
 }
 
 void exibirInstrucoes() {
@@ -170,12 +173,12 @@ void exibirInstrucoes() {
     DrawText("1. Escolha uma alternativa para cada pergunta.", 100, 100, 20, BLACK);
     DrawText("2. Responda todas as perguntas certas o mais rápido possível, se você não responder nenhuma, game over.", 100, 140, 20, BLACK);
     DrawText("3. O tempo total será usado para o ranking.", 100, 180, 20, BLACK);
-    DrawText("Pressione BACKSPACE para voltar ao menu", 100, 500, 20, DARKGRAY);
+    DrawText("Pressione ENTER para voltar ao menu", 100, 500, 20, DARKGRAY);
 }
 
 int main(void) {
     // Inicializa a janela
-    InitWindow(800, 600, "QuizShark");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "QuizShark");
 
     // Define o FPS alvo para uma contagem de tempo mais precisa
     SetTargetFPS(60);
@@ -337,14 +340,14 @@ int main(void) {
                     if (respostaSelecionada != perguntaAtual->resposta) {
                         removerVida(&vidas);
                         if (contarVidas(vidas) == 0) {
-                            screen = 3; // Vai para a tela de game over
+                            screen = 4; // Vai para a tela de game over
                         }
                     }
 
                     perguntaAtual->respondida = 1; // Marca a pergunta como respondida
                     perguntasRespondidas++;
                     if (perguntasRespondidas == 8) {
-                        screen = 2; // Vai para a tela de resultados
+                        screen = 3; // Vai para a tela de resultados
                         todasPerguntasRespondidas = true; // Para o temporizador
 
                         // Adiciona o jogador atual ao ranking e ordena
@@ -367,20 +370,23 @@ int main(void) {
 
             // Desenha o ranking
             exibirRanking(ranking, numJogadores);
+            if (IsKeyPressed(KEY_ENTER)) {
+                screen = 0; // Volta ao menu principal
+            }
 
         } else if (screen == 4) {
             // Tela de game over
             DrawText("Game Over! Você perdeu todas as suas vidas.", 100, 100, 20, DARKBLUE);
             DrawText(TextFormat("Tempo total: %.2f segundos", totalTime), 100, 150, 20, DARKBLUE);
+            DrawText("Pressione ENTER para voltar ao menu", 100, 500, 20, DARKGRAY);
 
-            // Desenha o ranking
-            exibirRanking(ranking, numJogadores);
             if (IsKeyPressed(KEY_ENTER)) {
-                break; // Sai do loop principal e encerra o jogo
+                screen = 0; // Volta ao menu principal
             }
+           
         } else if (screen == 5) {
             exibirInstrucoes();
-            if (IsKeyPressed(KEY_BACKSPACE)) {
+            if (IsKeyPressed(KEY_ENTER)) {
                 screen = 0; // Volta ao menu principal
             }
         }
