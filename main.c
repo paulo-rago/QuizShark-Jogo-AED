@@ -365,9 +365,7 @@ int main(void) {
                 }
             }
         } else if (screen == 3) {
-            // Tela de resultados
-            DrawText("Parabéns! Você respondeu todas as perguntas.", 100, 100, 20, DARKBLUE);
-            DrawText(TextFormat("Tempo total: %.2f segundos", totalTime), 100, 150, 20, DARKBLUE);
+
 
             // Desenha o ranking
             exibirRanking(ranking, numJogadores);
