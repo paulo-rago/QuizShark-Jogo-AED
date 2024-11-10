@@ -55,6 +55,37 @@ void liberarPerguntas(Pergunta *head) {
     }
 }
 
+Pergunta* perguntaAleatoria(Pergunta *head) {
+    Pergunta *current = head;
+    int totalPerguntas = 0;
+
+    // Conta o número total de perguntas
+    while (current != NULL) {
+        totalPerguntas++;
+        current = current->prox;
+    }
+
+    // Se todas as perguntas foram respondidas, retorna NULL
+    if (totalPerguntas == 0) {
+        return NULL;
+    }
+
+    Pergunta *perguntaSelecionada = NULL;
+    do {
+        int indiceAleatorio = rand() % totalPerguntas; // Gera um número entre 0 e totalPerguntas-1
+        current = head;
+        for (int i = 0; i < indiceAleatorio && current->prox != NULL; i++) {
+            current = current->prox;
+        }
+        if (!current->respondida) {
+            perguntaSelecionada = current;
+        }
+    } while (perguntaSelecionada == NULL);
+
+    return perguntaSelecionada;
+}
+
+// Funções de Vida
 void adicionarVida(Vida **head) {
     Vida *novaVida = (Vida*)malloc(sizeof(Vida));
     novaVida->prox = *head;
@@ -87,36 +118,7 @@ void liberarVidas(Vida *head) {
     }
 }
 
-Pergunta* perguntaAleatoria(Pergunta *head) {
-    Pergunta *current = head;
-    int totalPerguntas = 0;
-
-    // Conta o número total de perguntas
-    while (current != NULL) {
-        totalPerguntas++;
-        current = current->prox;
-    }
-
-    // Se todas as perguntas foram respondidas, retorna NULL
-    if (totalPerguntas == 0) {
-        return NULL;
-    }
-
-    Pergunta *perguntaSelecionada = NULL;
-    do {
-        int indiceAleatorio = rand() % totalPerguntas; // Gera um número entre 0 e totalPerguntas-1
-        current = head;
-        for (int i = 0; i < indiceAleatorio && current->prox != NULL; i++) {
-            current = current->prox;
-        }
-        if (!current->respondida) {
-            perguntaSelecionada = current;
-        }
-    } while (perguntaSelecionada == NULL);
-
-    return perguntaSelecionada;
-}
-
+// funções de ranking
 void bubbleSort(Jogador ranking[], int n) {
     for (int i = 0; i < n - 1; i++) {
         for (int j = 0; j < n - i - 1; j++) {
@@ -150,7 +152,26 @@ void salvarRanking(Jogador ranking[], int n) {
     }
 }
 
+void exibirRanking(Jogador ranking[], int numJogadores) {
+    ClearBackground(RAYWHITE);
+    DrawText("Ranking dos Jogadores:", 100, 50, 30, DARKBLUE);
 
+    for (int i = 0; i < numJogadores && i < 10; i++) {
+        DrawText(TextFormat("%d. %s - %.2f segundos", i + 1, ranking[i].nome, ranking[i].tempoTotal), 
+                 100, 100 + i * 40, 20, BLACK);
+    }
+
+    DrawText("Pressione BACKSPACE para voltar ao menu", 100, 500, 20, DARKGRAY);
+}
+
+void exibirInstrucoes() {
+    ClearBackground(RAYWHITE);
+    DrawText("Instruções:", 100, 50, 30, DARKBLUE);
+    DrawText("1. Escolha uma alternativa para cada pergunta.", 100, 100, 20, BLACK);
+    DrawText("2. Responda todas as perguntas certas o mais rápido possível, se você não responder nenhuma, game over.", 100, 140, 20, BLACK);
+    DrawText("3. O tempo total será usado para o ranking.", 100, 180, 20, BLACK);
+    DrawText("Pressione BACKSPACE para voltar ao menu", 100, 500, 20, DARKGRAY);
+}
 
 int main(void) {
     // Inicializa a janela
@@ -210,6 +231,45 @@ int main(void) {
 
         // Desenha conteúdo baseado na tela atual
         if (screen == 0) {
+            DrawText("QuizShark!", 250, 100, 40, DARKBLUE);
+            
+            Rectangle buttonPlay = { 300, 250, 200, 50 };
+            Rectangle buttonRanking = { 300, 320, 200, 50 };
+            Rectangle buttonInstructions = { 300, 390, 200, 50 };
+            Rectangle buttonExit = { 300, 460, 200, 50 };
+ 
+            DrawRectangleRec(buttonPlay, SKYBLUE);
+            DrawRectangleLinesEx(buttonPlay, 2, DARKGRAY);
+            DrawText("Jogar", buttonPlay.x + 75, buttonPlay.y + 15, 20, BLACK);
+
+            DrawRectangleRec(buttonRanking, SKYBLUE);
+            DrawRectangleLinesEx(buttonRanking, 2, DARKGRAY);
+            DrawText("Ranking", buttonRanking.x + 50, buttonRanking.y + 15, 20, BLACK);
+
+            DrawRectangleRec(buttonInstructions, SKYBLUE);
+            DrawRectangleLinesEx(buttonInstructions, 2, DARKGRAY);
+            DrawText("Instruções", buttonInstructions.x + 40, buttonInstructions.y + 15, 20, BLACK);
+
+            DrawRectangleRec(buttonExit, SKYBLUE);
+            DrawRectangleLinesEx(buttonExit, 2, DARKGRAY);
+            DrawText("Sair", buttonExit.x + 85, buttonExit.y + 15, 20, BLACK);
+
+
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                Vector2 mousePoint = GetMousePosition();
+                if (CheckCollisionPointRec(mousePoint, buttonPlay)) {
+                    screen = 1; 
+                } else if (CheckCollisionPointRec(mousePoint, buttonRanking)) {
+                    screen = 4; 
+                } else if (CheckCollisionPointRec(mousePoint, buttonInstructions)) {
+                    screen = 5; 
+                } else if (CheckCollisionPointRec(mousePoint, buttonExit)) {
+                    CloseWindow();
+                }
+            }
+        }
+
+        if (screen == 1) {
             DrawText("Digite seu nome:", 250, 100, 40, DARKBLUE);
             DrawText(nomeJogador, 250, 200, 40, DARKBLUE);
             DrawText("Pressione Enter para começar!", 210, 450, 20, DARKGRAY);
@@ -231,11 +291,12 @@ int main(void) {
             }
 
             if (IsKeyPressed(KEY_ENTER) && nomeIndex > 0) {
-                screen = 1;
+                screen = 2;
                 perguntaAtual = perguntaAleatoria(head);
                 timer = 0.0f;
             }
-        } else if (screen == 1) {
+            
+        } else if (screen == 2) {
             // Caixa de fundo para a pergunta
             DrawRectangle(100, 100, 600, 100, LIGHTGRAY);
             DrawRectangleLines(100, 100, 600, 100, DARKGRAY);
@@ -299,36 +360,30 @@ int main(void) {
                     }
                 }
             }
-        }
-        else if (screen == 2) {
+        } else if (screen == 3) {
             // Tela de resultados
             DrawText("Parabéns! Você respondeu todas as perguntas.", 100, 100, 20, DARKBLUE);
             DrawText(TextFormat("Tempo total: %.2f segundos", totalTime), 100, 150, 20, DARKBLUE);
 
             // Desenha o ranking
-            DrawText("Ranking:", 100, 200, 20, DARKBLUE);
-            for (int i = 0; i < numJogadores && i < 5; i++) {
-                DrawText(TextFormat("%d. %s - %.2f segundos", i + 1, ranking[i].nome, ranking[i].tempoTotal), 100, 230 + i * 30, 20, DARKBLUE);
-            }
-        }
-        else if (screen == 3) {
+            exibirRanking(ranking, numJogadores);
+
+        } else if (screen == 4) {
             // Tela de game over
             DrawText("Game Over! Você perdeu todas as suas vidas.", 100, 100, 20, DARKBLUE);
             DrawText(TextFormat("Tempo total: %.2f segundos", totalTime), 100, 150, 20, DARKBLUE);
 
             // Desenha o ranking
-            DrawText("Ranking:", 100, 200, 20, DARKBLUE);
-            for (int i = 0; i < numJogadores && i < 5; i++) {
-                DrawText(TextFormat("%d. %s - %.2f segundos", i + 1, ranking[i].nome, ranking[i].tempoTotal), 100, 230 + i * 30, 20, DARKBLUE);
-            }
-
-            DrawText("Pressione Enter para sair", 100, 400, 20, DARKGRAY);
-
+            exibirRanking(ranking, numJogadores);
             if (IsKeyPressed(KEY_ENTER)) {
                 break; // Sai do loop principal e encerra o jogo
             }
+        } else if (screen == 5) {
+            exibirInstrucoes();
+            if (IsKeyPressed(KEY_BACKSPACE)) {
+                screen = 0; // Volta ao menu principal
+            }
         }
-
         EndDrawing();
     }
 
