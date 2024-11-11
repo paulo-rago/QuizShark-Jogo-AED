@@ -389,6 +389,7 @@ int main(void) {
                 perguntaAtual = perguntaAleatoria(head);
                 timer = 0.0f;
                 indicePergunta = 1;
+                sharkPosX = 0; // Reinicia a posição do tubarão
             }
             
         } else if (screen == 2) {
@@ -490,11 +491,14 @@ int main(void) {
 
         } else if (screen == 4) {
             DrawTexture(mar1, 0, 0, WHITE);
+            sharkPosX = SCREEN_WIDTH * 0.75f; // Posiciona o tubarão em 75% da largura da tela
+            DrawTexture(shark, sharkPosX, SCREEN_HEIGHT - shark.height - 50, WHITE);
             DrawText("Game Over! Você perdeu todas as suas vidas.", 100, 100, 20, BLACK);
             DrawText("Pressione ENTER para voltar ao igreja", centerX(400), centerY(20) + 300, 20, BLACK);
 
             if (IsKeyPressed(KEY_ENTER)) {
                 screen = 0; 
+                sharkPosX = 0; // Reinicia a posição do tubarão
             }
            
         } else if (screen == 5) {
