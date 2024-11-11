@@ -1,8 +1,8 @@
-# 🏝️ Shark Challenge: Piedade Escape
+# 🏝️ QuizShark: Piedade Escape
 
 Piedade resolveu se refrescar em uma manhã ensolarada nas águas cristalinas perto da igreja. Mal sabia ela que um **tubarão feroz** espreitava pelas redondezas, com olhos atentos e fome implacável.  
 
-Agora, a vida de Pieade está por um fio – **e só você pode salvá-la!** Cada passo para a sobrevivência depende das suas respostas.  
+Agora, a vida de Piedade está por um fio **e só você pode salvá-la!** Cada passo para a sobrevivência depende das suas respostas.  
 
 ## ✨ Como funciona:
 - **Responda rápido!** Cada pergunta tem um **tempo limite**.  
@@ -13,3 +13,12 @@ Será que você consegue manter Pieade fora das mandíbulas desse predador famin
 
 **Afinal, Piedade sobreviverá para contar a história?**  
 Ou suas respostas a levarão direto para o jantar do tubarão? 🌊  
+
+## 🦈 Comandos do Jogo
+
+Para iniciar o jogo, execute os comandos abaixo no terminal:
+
+1. **Compilar o Jogo**
+   make
+   ./jogo
+
