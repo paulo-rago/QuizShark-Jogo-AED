@@ -174,13 +174,14 @@ int centerY(int height) {
 
 void exibirRanking(Jogador ranking[], int numJogadores) {
     ClearBackground(RAYWHITE);
-    DrawText("Ranking dos Jogadores", centerX(400), centerY(30)-200, 30, DARKBLUE);
+    DrawText("Ranking dos Jogadores", centerX(550), centerY(100)-200, 50, BLACK);
+    DrawRectangle(centerX(400), 275, 400, 450, BLACK);
 
     if (numJogadores == 0) {
         DrawText("Nenhum jogador no ranking ainda", centerX(400), 300, 20, DARKGRAY);
     } else {
         for (int i = 0; i < numJogadores && i < 10; i++) {
-            DrawText(TextFormat("%d. %s - %.2f segundos", i + 1, ranking[i].nome, ranking[i].tempoTotal), centerX(290), 300 + i * 40, 20, BLACK);
+            DrawText(TextFormat("%d. %s - %.2f segundos", i + 1, ranking[i].nome, ranking[i].tempoTotal), centerX(290), 300 + i * 40, 20, WHITE);
         }
     }
 }
@@ -221,7 +222,7 @@ int main(void) {
 
     Texture2D menu = LoadTexture("imgs/menu.png");
     if (menu.id == 0) {
-        printf("Erro ao carregar a imagem de fundo\n");
+        printf("Erro ao carregar a imagem do mar\n");
         return 1;
     }
 
@@ -463,15 +464,17 @@ int main(void) {
                 }
             }
         } else if (screen == 3) {
+            DrawTexture(background, 0, 0, WHITE);
             exibirRanking(ranking, numJogadores);
-            DrawText("Pressione ENTER para voltar ao menu", centerX(400), centerY(20) + 300, 20, DARKGRAY);
+            DrawText("Pressione ENTER para voltar ao menu", centerX(400), centerY(20) + 300, 20, LIGHTGRAY);
             if (IsKeyPressed(KEY_ENTER)) {
                 screen = 0; 
             }
 
         } else if (screen == 4) {
-            DrawText("Game Over! Você perdeu todas as suas vidas.", 100, 100, 20, DARKBLUE);
-            DrawText("Pressione ENTER para voltar ao menu", 100, 500, 20, DARKGRAY);
+            DrawTexture(background, 0, 0, WHITE);
+            DrawText("Game Over! Você perdeu todas as suas vidas.", 100, 100, 20, BLACK);
+            DrawText("Pressione ENTER para voltar ao menu", centerX(400), centerY(20) + 300, 20, BLACK);
 
             if (IsKeyPressed(KEY_ENTER)) {
                 screen = 0; 
