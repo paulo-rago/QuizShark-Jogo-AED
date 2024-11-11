@@ -189,7 +189,7 @@ void exibirInstrucoes() {
     ClearBackground(RAYWHITE);
     DrawText("Instruções:", 100, 50, 30, DARKBLUE);
     DrawText("1. Escolha uma alternativa para cada pergunta.", 100, 100, 20, BLACK);
-    DrawText("2. Responda todas as perguntas certas o mais rápido possível, se você não responder nenhuma, game over.", 100, 140, 20, BLACK);
+    DrawText("2. Responda todas as perguntas certas o mais rápido possível, \n se você não responder nenhuma, game over.\n", 100, 140, 20, BLACK);
     DrawText("3. O tempo total será usado para o ranking.", 100, 180, 20, BLACK);
     DrawText("Pressione ENTER para voltar ao menu", 100, 500, 20, DARKGRAY);
 }
