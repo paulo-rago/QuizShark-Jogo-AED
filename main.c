@@ -340,11 +340,13 @@ int main(void) {
             }
             
         } else if (screen == 2) {
+            DrawTexture(background, 0, 0, WHITE);
             // Converte o indice da pergunta para string, para poder imprimir na tela
             char indice[12];
             sprintf(indice, "%d", indicePergunta);
-            DrawText(indice, 108, 130, 20, DARKBLUE);
+            DrawText(indice, 108, 130, 20, BLACK);
             DrawText(perguntaAtual->enunciado, 120, 130, 20, DARKBLUE);
+
 
             // Botões com alternativas
             Rectangle button1 = { 100, 250, 600, 50 };
@@ -403,6 +405,7 @@ int main(void) {
                         perguntaAtual = perguntaAleatoria(head);
                     }
                 }
+
             }
         } else if (screen == 3) {
             exibirRanking(ranking, numJogadores);
