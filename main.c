@@ -177,7 +177,7 @@ void exibirRanking(Jogador ranking[], int numJogadores) {
     DrawText("Ranking dos Jogadores", centerX(400), centerY(30)-200, 30, DARKBLUE);
 
     if (numJogadores == 0) {
-        DrawText("Nenhum jogador no ranking ainda.", 100, 100, 20, DARKGRAY);
+        DrawText("Nenhum jogador no ranking ainda", centerX(400), 300, 20, DARKGRAY);
     } else {
         for (int i = 0; i < numJogadores && i < 10; i++) {
             DrawText(TextFormat("%d. %s - %.2f segundos", i + 1, ranking[i].nome, ranking[i].tempoTotal), centerX(290), 300 + i * 40, 20, BLACK);
