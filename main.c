@@ -164,16 +164,23 @@ void salvarRanking(Jogador ranking[], int n) {
     }
 }
 
+int centerX(int width) {
+    return (SCREEN_WIDTH - width) / 2;
+}
+
+int centerY(int height) {
+    return (SCREEN_HEIGHT - height) / 2;
+}
+
 void exibirRanking(Jogador ranking[], int numJogadores) {
     ClearBackground(RAYWHITE);
-    DrawText("Ranking dos Jogadores:", 100, 50, 30, DARKBLUE);
+    DrawText("Ranking dos Jogadores", centerX(400), centerY(30)-200, 30, DARKBLUE);
 
     if (numJogadores == 0) {
         DrawText("Nenhum jogador no ranking ainda.", 100, 100, 20, DARKGRAY);
     } else {
         for (int i = 0; i < numJogadores && i < 10; i++) {
-            DrawText(TextFormat("%d. %s - %.2f segundos", i + 1, ranking[i].nome, ranking[i].tempoTotal), 
-                     100, 100 + i * 40, 20, BLACK);
+            DrawText(TextFormat("%d. %s - %.2f segundos", i + 1, ranking[i].nome, ranking[i].tempoTotal), centerX(290), 300 + i * 40, 20, BLACK);
         }
     }
 }
@@ -185,14 +192,6 @@ void exibirInstrucoes() {
     DrawText("2. Responda todas as perguntas certas o mais rápido possível, se você não responder nenhuma, game over.", 100, 140, 20, BLACK);
     DrawText("3. O tempo total será usado para o ranking.", 100, 180, 20, BLACK);
     DrawText("Pressione ENTER para voltar ao menu", 100, 500, 20, DARKGRAY);
-}
-
-int centerX(int width) {
-    return (SCREEN_WIDTH - width) / 2;
-}
-
-int centerY(int height) {
-    return (SCREEN_HEIGHT - height) / 2;
 }
 
 int main(void) {
@@ -465,7 +464,7 @@ int main(void) {
             }
         } else if (screen == 3) {
             exibirRanking(ranking, numJogadores);
-            DrawText("Pressione ENTER para voltar ao menu", 100, 500, 20, DARKGRAY);
+            DrawText("Pressione ENTER para voltar ao menu", centerX(400), centerY(20) + 300, 20, DARKGRAY);
             if (IsKeyPressed(KEY_ENTER)) {
                 screen = 0; 
             }
