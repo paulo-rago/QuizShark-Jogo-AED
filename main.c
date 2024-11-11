@@ -354,7 +354,7 @@ int main(void) {
             DrawTexture(menu, 0, 0, WHITE);
             DrawText("Digite seu nome:", centerX(400), centerY(40) - 200, 40, DARKBLUE);
             DrawText(nomeJogador, centerX(400), centerY(40) - 100, 40, DARKBLUE);
-            DrawText("Pressione Enter para começar!", centerX(400), centerY(20) + 200, 20, DARKGRAY);
+            DrawText("Pressione Enter para começar!", centerX(400), centerY(20) + 300, 20, BLACK);
 
             // Captura a entrada do teclado para o nome do jogador
             int key = GetCharPressed();
@@ -379,16 +379,15 @@ int main(void) {
                 indicePergunta = 1;
             }
             
-        } else if (screen == 2)
-        {
+        } else if (screen == 2) {
             // Desenha a imagem de fundo
             DrawTexture(background, 0, 0, WHITE);
 
             // Converte o indice da pergunta para string, para poder imprimir na tela
             char indice[12];
             sprintf(indice, "%d", indicePergunta);
-            DrawText(indice, centerX(20), 130, 20, DARKBLUE);
-            DrawText(perguntaAtual->enunciado, centerX(600), 130, 20, DARKBLUE);
+            DrawText(indice, centerX(625), 130, 20, BLACK);
+            DrawText(perguntaAtual->enunciado, centerX(600), 130, 20, BLACK);
 
             // Botões com alternativas
             Rectangle button1 = { centerX(600), 250, 600, 50 };
@@ -426,11 +425,9 @@ int main(void) {
             }
 
             // Lógica para marcar a pergunta como respondida e passar para a próxima
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-            {
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 Vector2 mousePoint = GetMousePosition();
-                if (CheckCollisionPointRec(mousePoint, button1) || CheckCollisionPointRec(mousePoint, button2) || CheckCollisionPointRec(mousePoint, button3))
-                {
+                if (CheckCollisionPointRec(mousePoint, button1) || CheckCollisionPointRec(mousePoint, button2) || CheckCollisionPointRec(mousePoint, button3)) {
                     char respostaSelecionada;
                     if (CheckCollisionPointRec(mousePoint, button1)) respostaSelecionada = 'A';
                     else if (CheckCollisionPointRec(mousePoint, button2)) respostaSelecionada = 'B';
@@ -468,6 +465,7 @@ int main(void) {
             }
         } else if (screen == 3) {
             exibirRanking(ranking, numJogadores);
+            DrawText("Pressione ENTER para voltar ao menu", 100, 500, 20, DARKGRAY);
             if (IsKeyPressed(KEY_ENTER)) {
                 screen = 0; 
             }
