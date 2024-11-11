@@ -186,6 +186,14 @@ void exibirInstrucoes() {
     DrawText("Pressione ENTER para voltar ao menu", 100, 500, 20, DARKGRAY);
 }
 
+int centerX(int width) {
+    return (SCREEN_WIDTH - width) / 2;
+}
+
+int centerY(int height) {
+    return (SCREEN_HEIGHT - height) / 2;
+}
+
 int main(void) {
     // Inicializa a janela
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "QuizShark");
@@ -228,7 +236,7 @@ int main(void) {
     adicionarPergunta(&head, ". Qual é a importância da Igrejinha de Piedade?", " a) É um ponto turístico", " b) É um local histórico", " c) Não tem importância", 'B', 30);
     adicionarPergunta(&head, ". Por que a Igrejinha de Piedade é considerada \n\n ponto crítico para incidentes com tubarões?", " a) Pela poluição da água", " b) Devido à abertura nos arrecifes", " c) Por causa da pesca excessiva", 'B', 30);
     adicionarPergunta(&head, ". Que medidas as autoridades têm tomado para lidar com \n\n os ataques de tubarão nas praias perto da Igrejinha de Piedade?", " a) Aumentar a fiscalização", " b) Proibir o banho de mar", " c) Construir barreiras", 'A', 30);
-    adicionarPergunta(&head, ". Qual é a relevância da Igrejinha de Piedade \n\n no contexto histórico e social de Pernambuco?", " a) É um ponto de referência para turistas apenas", " b) Está ligada ao ciclo da cana-de-açúcar e à história colonial", " c) Não possui relevância histórica", 'B', 30);
+    adicionarPergunta(&head, ". Qual é a relevância da Igrejinha de Piedade \n\n no contexto histórico e social de Pernambuco?", " a) É um ponto de referência para turistas apenas", " b) Está ligada ao ciclo da cana-de-açúcar", " c) Não possui relevância histórica", 'B', 30);
     adicionarPergunta(&head, ". Qual foi a ação recomendada por especialistas em \n\n resposta ao aumento de ataques de tubarão em Piedade?", " a) Construir barreiras no mar", " b) Implantar restrições de banho em áreas de risco", " c) Organizar campanhas de conscientização", 'B', 30);
 
     Pergunta *perguntaAtual = head;
@@ -266,13 +274,13 @@ int main(void) {
 
         if (screen == 0) {
             DrawTexture(menu, 0, 0, WHITE);
-            DrawTexture(logo, 250, 100, WHITE);
+            DrawTexture(logo, centerX(logo.width), centerY(logo.height) - 200, WHITE);
             
-            Rectangle buttonPlay = { 300, 250, 200, 50 };
-            Rectangle buttonRanking = { 300, 320, 200, 50 };
-            Rectangle buttonInstructions = { 300, 390, 200, 50 };
-            Rectangle buttonExit = { 300, 460, 200, 50 };
- 
+            Rectangle buttonPlay = { centerX(200), centerY(50) - 100, 200, 50 };
+            Rectangle buttonRanking = { centerX(200), centerY(50), 200, 50 };
+            Rectangle buttonInstructions = { centerX(200), centerY(50) + 100, 200, 50 };
+            Rectangle buttonExit = { centerX(200), centerY(50) + 200, 200, 50 };
+
             DrawRectangleRec(buttonPlay, SKYBLUE);
             DrawRectangleLinesEx(buttonPlay, 2, DARKGRAY);
             DrawText("Jogar", buttonPlay.x + 75, buttonPlay.y + 15, 20, BLACK);
@@ -327,9 +335,9 @@ int main(void) {
 
         if (screen == 1) {
             DrawTexture(menu, 0, 0, WHITE);
-            DrawText("Digite seu nome:", 250, 100, 40, DARKBLUE);
-            DrawText(nomeJogador, 250, 200, 40, DARKBLUE);
-            DrawText("Pressione Enter para começar!", 210, 450, 20, DARKGRAY);
+            DrawText("Digite seu nome:", centerX(400), centerY(40) - 200, 40, DARKBLUE);
+            DrawText(nomeJogador, centerX(400), centerY(40) - 100, 40, DARKBLUE);
+            DrawText("Pressione Enter para começar!", centerX(400), centerY(20) + 200, 20, DARKGRAY);
 
             // Captura a entrada do teclado para o nome do jogador
             int key = GetCharPressed();
@@ -359,14 +367,14 @@ int main(void) {
             // Converte o indice da pergunta para string, para poder imprimir na tela
             char indice[12];
             sprintf(indice, "%d", indicePergunta);
-            DrawText(indice, 108, 130, 20, BLACK);
-            DrawText(perguntaAtual->enunciado, 120, 130, 20, BLACK);
+            DrawText(indice, centerX(20), centerY(20) - 300, 20, DARKBLUE);
+            DrawText(perguntaAtual->enunciado, centerX(600), centerY(20) - 200, 20, DARKBLUE);
 
 
             // Botões com alternativas
-            Rectangle button1 = { 100, 250, 600, 50 };
-            Rectangle button2 = { 100, 320, 600, 50 };
-            Rectangle button3 = { 100, 390, 600, 50 };
+            Rectangle button1 = { centerX(600), centerY(50) - 100, 600, 50 };
+            Rectangle button2 = { centerX(600), centerY(50), 600, 50 };
+            Rectangle button3 = { centerX(600), centerY(50) + 100, 600, 50 };
 
             DrawRectangleRec(button1, SKYBLUE);
             DrawRectangleLinesEx(button1, 2, DARKGRAY);
@@ -382,7 +390,7 @@ int main(void) {
 
             int vidasRestantes = contarVidas(vidas);
             for (int i = 0; i < vidasRestantes; i++) {
-                DrawTexture(heart, 700 + i * 30, 20, WHITE);
+                DrawTexture(heart, centerX(heart.width) + i * 30, 20, WHITE);
             }
 
             // Lógica para marcar a pergunta como respondida e passar para a próxima
