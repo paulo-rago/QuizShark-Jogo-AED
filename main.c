@@ -191,14 +191,21 @@ int main(void) {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "QuizShark");
 
     // Carrega a imagem de coração
-    Texture2D heart = LoadTexture("heart.png");
+    Texture2D heart = LoadTexture("imgs/heart.png");
     if (heart.id == 0) {
         printf("Erro ao carregar a imagem de coração\n");
         return 1;
     }
 
+    // Carrega a imagem da logo
+    Texture2D logo = LoadTexture("imgs/logo.png");
+    if (logo.id == 0) {
+        printf("Erro ao carregar a logo\n");
+        return 1;
+    }
+
     // Carrega a imagem de fundo
-    Texture2D background = LoadTexture("image.png");
+    Texture2D background = LoadTexture("imgs/image.png");
     if (background.id == 0) {
         printf("Erro ao carregar a imagem de fundo\n");
         return 1;
@@ -252,7 +259,7 @@ int main(void) {
         ClearBackground(RAYWHITE);
 
         if (screen == 0) {
-            DrawText("QuizShark!", 250, 100, 40, DARKBLUE);
+            DrawTexture(logo, 250, 100, WHITE);
             
             Rectangle buttonPlay = { 300, 250, 200, 50 };
             Rectangle buttonRanking = { 300, 320, 200, 50 };
@@ -345,7 +352,7 @@ int main(void) {
             char indice[12];
             sprintf(indice, "%d", indicePergunta);
             DrawText(indice, 108, 130, 20, BLACK);
-            DrawText(perguntaAtual->enunciado, 120, 130, 20, DARKBLUE);
+            DrawText(perguntaAtual->enunciado, 120, 130, 20, BLACK);
 
 
             // Botões com alternativas
