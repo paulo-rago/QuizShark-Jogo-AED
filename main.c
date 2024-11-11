@@ -190,6 +190,20 @@ int main(void) {
     // Inicializa a janela
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "QuizShark");
 
+    // Carrega a imagem de coração
+    Texture2D heart = LoadTexture("heart.png");
+    if (heart.id == 0) {
+        printf("Erro ao carregar a imagem de coração\n");
+        return 1;
+    }
+
+    // Carrega a imagem de fundo
+    Texture2D background = LoadTexture("image.png");
+    if (background.id == 0) {
+        printf("Erro ao carregar a imagem de fundo\n");
+        return 1;
+    }
+
     // Define o FPS alvo para uma contagem de tempo mais precisa
     SetTargetFPS(60);
 
@@ -351,7 +365,7 @@ int main(void) {
 
             int vidasRestantes = contarVidas(vidas);
             for (int i = 0; i < vidasRestantes; i++) {
-                DrawText("❤️", 700 + i * 30, 20, 20, RED);
+                DrawTexture(heart, 700 + i * 30, 20, WHITE);
             }
 
             // Lógica para marcar a pergunta como respondida e passar para a próxima
@@ -412,6 +426,12 @@ int main(void) {
         }
         EndDrawing();
     }
+
+    // Libera a textura da imagem de coração
+    UnloadTexture(heart);
+
+    // Libera a textura da imagem de fundo
+    UnloadTexture(background);
 
     // Libera a memória alocada para as perguntas
     liberarPerguntas(head);
