@@ -12,7 +12,7 @@ typedef struct Pergunta {
     char alternativas[3][256]; 
     char resposta;       
     int tempo;
-    int respondida; // Novo campo para marcar se a pergunta foi respondida
+    int respondida; 
     struct Pergunta *prox;
 } Pergunta;
 
@@ -185,14 +185,14 @@ int main(void) {
 
     // Criação das perguntas
     Pergunta *head = NULL;
-    adicionarPergunta(&head, "1. Qual é a localização da Igrejinha de Piedade?", " a) Recife", " b) Jaboatão dos Guararapes", " c) Olinda", 'B', 40);
-    adicionarPergunta(&head, "2. Em que século foi fundada a Igrejinha de Piedade?", " a) Século XVI", " b) Século XVII", " c) Século XVIII", 'B', 40);
-    adicionarPergunta(&head, "3. Qual é o estilo arquitetônico da Igrejinha de Piedade?", " a) Barroco", " b) Neoclássico", " c) Maneirista", 'C', 30);
-    adicionarPergunta(&head, "4. Qual é a importância da Igrejinha de Piedade?", " a) É um ponto turístico", " b) É um local histórico", " c) Não tem importância", 'B', 30);
-    adicionarPergunta(&head, "5. Por que a Igrejinha de Piedade é considerada um ponto crítico para incidentes com tubarões?", " a) Pela poluição da água", " b) Devido à abertura nos arrecifes", " c) Por causa da pesca excessiva", 'B', 30);
-    adicionarPergunta(&head, "6. Que medidas as autoridades têm tomado para lidar com os ataques de tubarão nas praias perto da Igrejinha de Piedade?", " a) Aumentar a fiscalização", " b) Proibir o banho de mar", " c) Construir barreiras", 'A', 30);
-    adicionarPergunta(&head, "7. Qual é a relevância da Igrejinha de Piedade no contexto histórico e social de Pernambuco?", " a) É um ponto de referência para turistas apenas", " b) Está ligada ao ciclo da cana-de-açúcar e à história colonial", " c) Não possui relevância histórica", 'B', 30);
-    adicionarPergunta(&head, "8. Qual foi a ação recomendada por especialistas em resposta ao aumento de ataques de tubarão em Piedade?", " a) Construir barreiras no mar", " b) Implantar restrições de banho em áreas de risco", " c) Organizar campanhas de conscientização", 'B', 30);
+    adicionarPergunta(&head, ". Qual é a localização da Igrejinha de Piedade?", " a) Recife", " b) Jaboatão dos Guararapes", " c) Olinda", 'B', 40);
+    adicionarPergunta(&head, ". Em que século foi fundada a Igrejinha de Piedade?", " a) Século XVI", " b) Século XVII", " c) Século XVIII", 'B', 40);
+    adicionarPergunta(&head, ". Qual é o estilo arquitetônico da Igrejinha de Piedade?", " a) Barroco", " b) Neoclássico", " c) Maneirista", 'C', 30);
+    adicionarPergunta(&head, ". Qual é a importância da Igrejinha de Piedade?", " a) É um ponto turístico", " b) É um local histórico", " c) Não tem importância", 'B', 30);
+    adicionarPergunta(&head, ". Por que a Igrejinha de Piedade é considerada um ponto crítico para incidentes com tubarões?", " a) Pela poluição da água", " b) Devido à abertura nos arrecifes", " c) Por causa da pesca excessiva", 'B', 30);
+    adicionarPergunta(&head, ". Que medidas as autoridades têm tomado para lidar com os ataques de tubarão nas praias perto da Igrejinha de Piedade?", " a) Aumentar a fiscalização", " b) Proibir o banho de mar", " c) Construir barreiras", 'A', 30);
+    adicionarPergunta(&head, ". Qual é a relevância da Igrejinha de Piedade no contexto histórico e social de Pernambuco?", " a) É um ponto de referência para turistas apenas", " b) Está ligada ao ciclo da cana-de-açúcar e à história colonial", " c) Não possui relevância histórica", 'B', 30);
+    adicionarPergunta(&head, ". Qual foi a ação recomendada por especialistas em resposta ao aumento de ataques de tubarão em Piedade?", " a) Construir barreiras no mar", " b) Implantar restrições de banho em áreas de risco", " c) Organizar campanhas de conscientização", 'B', 30);
 
     Pergunta *perguntaAtual = head;
 
@@ -202,25 +202,21 @@ int main(void) {
     float totalTime = 0.0f;
     int perguntasRespondidas = 0;
     bool jogoAcabou = false;
+    int indicePergunta = 1; 
 
-    // Variável para armazenar o nome do jogador
     char nomeJogador[50] = "";
     int nomeIndex = 0;
 
-    // Ranking de jogadores
-    Jogador ranking[100]; // Aumentado para suportar mais jogadores
+    Jogador ranking[100]; 
     int numJogadores = 0;
 
-    // Carrega o ranking do arquivo
     carregarRanking(ranking, &numJogadores);
 
-    // Lista encadeada de vidas
     Vida *vidas = NULL;
     for (int i = 0; i < 3; i++) {
         adicionarVida(&vidas);
     }
 
-    // Loop principal do jogo
     while (!WindowShouldClose()) {
         // Atualiza o timer
         if (!jogoAcabou) {
@@ -228,11 +224,9 @@ int main(void) {
             totalTime += GetFrameTime();
         }
 
-        // Inicia o desenho
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        // Desenha conteúdo baseado na tela atual
         if (screen == 0) {
             DrawText("QuizShark!", 250, 100, 40, DARKBLUE);
             
@@ -297,12 +291,18 @@ int main(void) {
                 screen = 2;
                 perguntaAtual = perguntaAleatoria(head);
                 timer = 0.0f;
+                indicePergunta = 1;
             }
             
         } else if (screen == 2) {
             // Caixa de fundo para a pergunta
             DrawRectangle(100, 100, 600, 100, LIGHTGRAY);
             DrawRectangleLines(100, 100, 600, 100, DARKGRAY);
+
+            // Converte o indice da pergunta para string, para poder imprimir na tela
+            char indice[12];
+            sprintf(indice, "%d", indicePergunta);
+            DrawText(indice, 108, 130, 20, DARKBLUE);
             DrawText(perguntaAtual->enunciado, 120, 130, 20, DARKBLUE);
 
             // Botões com alternativas
@@ -322,7 +322,6 @@ int main(void) {
             DrawRectangleLinesEx(button3, 2, DARKGRAY);
             DrawText(perguntaAtual->alternativas[2], button3.x + 20, button3.y + 15, 20, BLACK);
 
-            // Desenha as vidas restantes
             int vidasRestantes = contarVidas(vidas);
             for (int i = 0; i < vidasRestantes; i++) {
                 DrawText("❤️", 700 + i * 30, 20, 20, RED);
@@ -341,14 +340,15 @@ int main(void) {
                         removerVida(&vidas);
                         if (contarVidas(vidas) == 0) {
                             jogoAcabou = true; // Para o temporizador
-                            screen = 4; // Vai para a tela de game over
+                            screen = 4; 
                         }
                     }
 
                     perguntaAtual->respondida = 1; // Marca a pergunta como respondida
                     perguntasRespondidas++;
+                    indicePergunta++; 
                     if (perguntasRespondidas == 8) {
-                        screen = 3; // Vai para a tela de resultados
+                        screen = 3; 
                         jogoAcabou = true; // Para o temporizador
 
                         // Adiciona o jogador atual ao ranking e ordena
@@ -357,7 +357,6 @@ int main(void) {
                         numJogadores++;
                         bubbleSort(ranking, numJogadores);
 
-                        // Salva o ranking atualizado no arquivo
                         salvarRanking(ranking, numJogadores);
                     } else {
                         perguntaAtual = perguntaAleatoria(head);
@@ -365,27 +364,23 @@ int main(void) {
                 }
             }
         } else if (screen == 3) {
-
-
-            // Desenha o ranking
             exibirRanking(ranking, numJogadores);
             if (IsKeyPressed(KEY_ENTER)) {
-                screen = 0; // Volta ao menu principal
+                screen = 0; 
             }
 
         } else if (screen == 4) {
-            // Tela de game over
             DrawText("Game Over! Você perdeu todas as suas vidas.", 100, 100, 20, DARKBLUE);
             DrawText("Pressione ENTER para voltar ao menu", 100, 500, 20, DARKGRAY);
 
             if (IsKeyPressed(KEY_ENTER)) {
-                screen = 0; // Volta ao menu principal
+                screen = 0; 
             }
            
         } else if (screen == 5) {
             exibirInstrucoes();
             if (IsKeyPressed(KEY_ENTER)) {
-                screen = 0; // Volta ao menu principal
+                screen = 0; 
             }
         }
         EndDrawing();
