@@ -167,12 +167,14 @@ void exibirRanking(Jogador ranking[], int numJogadores) {
     ClearBackground(RAYWHITE);
     DrawText("Ranking dos Jogadores:", 100, 50, 30, DARKBLUE);
 
-    for (int i = 0; i < numJogadores && i < 10; i++) {
-        DrawText(TextFormat("%d. %s - %.2f segundos", i + 1, ranking[i].nome, ranking[i].tempoTotal), 
-                 100, 100 + i * 40, 20, BLACK);
+    if (numJogadores == 0) {
+        DrawText("Nenhum jogador no ranking ainda.", 100, 100, 20, DARKGRAY);
+    } else {
+        for (int i = 0; i < numJogadores && i < 10; i++) {
+            DrawText(TextFormat("%d. %s - %.2f segundos", i + 1, ranking[i].nome, ranking[i].tempoTotal), 
+                     100, 100 + i * 40, 20, BLACK);
+        }
     }
-
-    DrawText("Pressione ENTER para voltar ao menu", 100, 500, 20, DARKGRAY);
 }
 
 void exibirInstrucoes() {
@@ -286,7 +288,7 @@ int main(void) {
                     
                     screen = 1; 
                 } else if (CheckCollisionPointRec(mousePoint, buttonRanking)) {
-                    screen = 4; 
+                    screen = 3; 
                 } else if (CheckCollisionPointRec(mousePoint, buttonInstructions)) {
                     screen = 5; 
                 } else if (CheckCollisionPointRec(mousePoint, buttonExit)) {
