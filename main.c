@@ -4,8 +4,8 @@
 #include <time.h>
 #include <raylib.h>
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
+#define SCREEN_WIDTH 913
+#define SCREEN_HEIGHT 913
 
 typedef struct Pergunta {
     char enunciado[256];
@@ -211,6 +211,12 @@ int main(void) {
         return 1;
     }
 
+    Texture2D menu = LoadTexture("imgs/menu.png");
+    if (menu.id == 0) {
+        printf("Erro ao carregar a imagem de fundo\n");
+        return 1;
+    }
+ 
     // Define o FPS alvo para uma contagem de tempo mais precisa
     SetTargetFPS(60);
 
@@ -259,6 +265,7 @@ int main(void) {
         ClearBackground(RAYWHITE);
 
         if (screen == 0) {
+            DrawTexture(menu, 0, 0, WHITE);
             DrawTexture(logo, 250, 100, WHITE);
             
             Rectangle buttonPlay = { 300, 250, 200, 50 };
@@ -319,6 +326,7 @@ int main(void) {
         }
 
         if (screen == 1) {
+            DrawTexture(menu, 0, 0, WHITE);
             DrawText("Digite seu nome:", 250, 100, 40, DARKBLUE);
             DrawText(nomeJogador, 250, 200, 40, DARKBLUE);
             DrawText("Pressione Enter para começar!", 210, 450, 20, DARKGRAY);
@@ -442,6 +450,8 @@ int main(void) {
 
     // Libera a textura da imagem de fundo
     UnloadTexture(background);
+
+    UnloadTexture(menu);
 
     // Libera a memória alocada para as perguntas
     liberarPerguntas(head);
