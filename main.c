@@ -121,6 +121,14 @@ void liberarVidas(Vida *head) {
     }
 }
 
+void reiniciarVidas(Vida **head, int numVidas) {
+    liberarVidas(*head);
+    *head = NULL;
+    for (int i = 0; i < numVidas; i++) {
+        adicionarVida(head);
+    }
+}
+
 // funções de ranking
 void bubbleSort(Jogador ranking[], int n) {
     for (int i = 0; i < n - 1; i++) {
@@ -255,6 +263,27 @@ int main(void) {
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 Vector2 mousePoint = GetMousePosition();
                 if (CheckCollisionPointRec(mousePoint, buttonPlay)) {
+                    // Reinicializar as variáveis para uma nova partida
+                    jogoAcabou = false;
+                    timer = 0.0f;
+                    totalTime = 0.0f;
+                    perguntasRespondidas = 0;
+                    indicePergunta = 1;
+                    
+                    // Reinicializar as perguntas para não respondidas
+                    Pergunta *temp = head;
+                    while (temp != NULL) {
+                        temp->respondida = 0;
+                        temp = temp->prox;
+                    }
+
+                    // Reinicializar as vidas
+                    reiniciarVidas(&vidas, 3);
+
+                    // Configurar o nome e outras configurações da nova partida
+                    nomeIndex = 0;
+                    nomeJogador[0] = '\0';
+                    
                     screen = 1; 
                 } else if (CheckCollisionPointRec(mousePoint, buttonRanking)) {
                     screen = 4; 
