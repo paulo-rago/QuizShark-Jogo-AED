@@ -4,6 +4,7 @@
 #include <time.h>
 #include <raylib.h>
 
+
 #define SCREEN_WIDTH 913
 #define SCREEN_HEIGHT 913
 
@@ -224,6 +225,18 @@ int main(void) {
         printf("Erro ao carregar a imagem de fundo\n");
         return 1;
     }
+
+    Texture2D shark = LoadTexture("imgs/shark.png");
+    if (shark.id == 0) {
+        printf("Erro ao carregar shark\n");
+        return 1;
+    }
+
+    Texture2D headShark = LoadTexture("imgs/headShark.png");
+    if (headShark.id == 0) {
+        printf("Erro ao carregar headShark\n");
+        return 1;
+    }
  
     // Define o FPS alvo para uma contagem de tempo mais precisa
     SetTargetFPS(60);
@@ -261,6 +274,10 @@ int main(void) {
     for (int i = 0; i < 3; i++) {
         adicionarVida(&vidas);
     }
+
+    float sharkPosX = 0;
+    bool showHeadShark = false;
+    float headSharkTimer = 0.0f;
 
     while (!WindowShouldClose()) {
         // Atualiza o timer
@@ -362,19 +379,21 @@ int main(void) {
                 indicePergunta = 1;
             }
             
-        } else if (screen == 2) {
+        } else if (screen == 2)
+        {
+            // Desenha a imagem de fundo
             DrawTexture(background, 0, 0, WHITE);
+
             // Converte o indice da pergunta para string, para poder imprimir na tela
             char indice[12];
             sprintf(indice, "%d", indicePergunta);
-            DrawText(indice, centerX(20), centerY(20) - 300, 20, DARKBLUE);
-            DrawText(perguntaAtual->enunciado, centerX(600), centerY(20) - 200, 20, DARKBLUE);
-
+            DrawText(indice, centerX(20), 130, 20, DARKBLUE);
+            DrawText(perguntaAtual->enunciado, centerX(600), 130, 20, DARKBLUE);
 
             // Botões com alternativas
-            Rectangle button1 = { centerX(600), centerY(50) - 100, 600, 50 };
-            Rectangle button2 = { centerX(600), centerY(50), 600, 50 };
-            Rectangle button3 = { centerX(600), centerY(50) + 100, 600, 50 };
+            Rectangle button1 = { centerX(600), 250, 600, 50 };
+            Rectangle button2 = { centerX(600), 320, 600, 50 };
+            Rectangle button3 = { centerX(600), 390, 600, 50 };
 
             DrawRectangleRec(button1, SKYBLUE);
             DrawRectangleLinesEx(button1, 2, DARKGRAY);
@@ -388,15 +407,30 @@ int main(void) {
             DrawRectangleLinesEx(button3, 2, DARKGRAY);
             DrawText(perguntaAtual->alternativas[2], button3.x + 20, button3.y + 15, 20, BLACK);
 
+            // Desenha as vidas restantes
             int vidasRestantes = contarVidas(vidas);
             for (int i = 0; i < vidasRestantes; i++) {
                 DrawTexture(heart, centerX(heart.width) + i * 30, 20, WHITE);
             }
 
+            // Desenha o tubarão ou a cabeça do tubarão
+            if (showHeadShark) {
+                DrawTexture(headShark, sharkPosX, SCREEN_HEIGHT - headShark.height - 50, WHITE);
+                headSharkTimer += GetFrameTime();
+                if (headSharkTimer >= 4.0f) {
+                    showHeadShark = false;
+                    headSharkTimer = 0.0f;
+                }
+            } else {
+                DrawTexture(shark, sharkPosX, SCREEN_HEIGHT - shark.height - 50, WHITE);
+            }
+
             // Lógica para marcar a pergunta como respondida e passar para a próxima
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            {
                 Vector2 mousePoint = GetMousePosition();
-                if (CheckCollisionPointRec(mousePoint, button1) || CheckCollisionPointRec(mousePoint, button2) || CheckCollisionPointRec(mousePoint, button3)) {
+                if (CheckCollisionPointRec(mousePoint, button1) || CheckCollisionPointRec(mousePoint, button2) || CheckCollisionPointRec(mousePoint, button3))
+                {
                     char respostaSelecionada;
                     if (CheckCollisionPointRec(mousePoint, button1)) respostaSelecionada = 'A';
                     else if (CheckCollisionPointRec(mousePoint, button2)) respostaSelecionada = 'B';
@@ -407,6 +441,9 @@ int main(void) {
                         if (contarVidas(vidas) == 0) {
                             jogoAcabou = true; // Para o temporizador
                             screen = 4; 
+                        } else {
+                            showHeadShark = true;
+                            sharkPosX += SCREEN_WIDTH * 0.1f; // Movimenta o tubarão 10% da largura da tela
                         }
                     }
 
@@ -428,7 +465,6 @@ int main(void) {
                         perguntaAtual = perguntaAleatoria(head);
                     }
                 }
-
             }
         } else if (screen == 3) {
             exibirRanking(ranking, numJogadores);
