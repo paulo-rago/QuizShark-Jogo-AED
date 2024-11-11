@@ -197,10 +197,10 @@ int main(void) {
     adicionarPergunta(&head, ". Em que século foi fundada a Igrejinha de Piedade?", " a) Século XVI", " b) Século XVII", " c) Século XVIII", 'B', 40);
     adicionarPergunta(&head, ". Qual é o estilo arquitetônico da Igrejinha de Piedade?", " a) Barroco", " b) Neoclássico", " c) Maneirista", 'C', 30);
     adicionarPergunta(&head, ". Qual é a importância da Igrejinha de Piedade?", " a) É um ponto turístico", " b) É um local histórico", " c) Não tem importância", 'B', 30);
-    adicionarPergunta(&head, ". Por que a Igrejinha de Piedade é considerada um ponto crítico para incidentes com tubarões?", " a) Pela poluição da água", " b) Devido à abertura nos arrecifes", " c) Por causa da pesca excessiva", 'B', 30);
-    adicionarPergunta(&head, ". Que medidas as autoridades têm tomado para lidar com os ataques de tubarão nas praias perto da Igrejinha de Piedade?", " a) Aumentar a fiscalização", " b) Proibir o banho de mar", " c) Construir barreiras", 'A', 30);
-    adicionarPergunta(&head, ". Qual é a relevância da Igrejinha de Piedade no contexto histórico e social de Pernambuco?", " a) É um ponto de referência para turistas apenas", " b) Está ligada ao ciclo da cana-de-açúcar e à história colonial", " c) Não possui relevância histórica", 'B', 30);
-    adicionarPergunta(&head, ". Qual foi a ação recomendada por especialistas em resposta ao aumento de ataques de tubarão em Piedade?", " a) Construir barreiras no mar", " b) Implantar restrições de banho em áreas de risco", " c) Organizar campanhas de conscientização", 'B', 30);
+    adicionarPergunta(&head, ". Por que a Igrejinha de Piedade é considerada \n\n ponto crítico para incidentes com tubarões?", " a) Pela poluição da água", " b) Devido à abertura nos arrecifes", " c) Por causa da pesca excessiva", 'B', 30);
+    adicionarPergunta(&head, ". Que medidas as autoridades têm tomado para lidar com \n\n os ataques de tubarão nas praias perto da Igrejinha de Piedade?", " a) Aumentar a fiscalização", " b) Proibir o banho de mar", " c) Construir barreiras", 'A', 30);
+    adicionarPergunta(&head, ". Qual é a relevância da Igrejinha de Piedade \n\n no contexto histórico e social de Pernambuco?", " a) É um ponto de referência para turistas apenas", " b) Está ligada ao ciclo da cana-de-açúcar e à história colonial", " c) Não possui relevância histórica", 'B', 30);
+    adicionarPergunta(&head, ". Qual foi a ação recomendada por especialistas em \n\n resposta ao aumento de ataques de tubarão em Piedade?", " a) Construir barreiras no mar", " b) Implantar restrições de banho em áreas de risco", " c) Organizar campanhas de conscientização", 'B', 30);
 
     Pergunta *perguntaAtual = head;
 
@@ -324,10 +324,6 @@ int main(void) {
             }
             
         } else if (screen == 2) {
-            // Caixa de fundo para a pergunta
-            DrawRectangle(100, 100, 600, 100, LIGHTGRAY);
-            DrawRectangleLines(100, 100, 600, 100, DARKGRAY);
-
             // Converte o indice da pergunta para string, para poder imprimir na tela
             char indice[12];
             sprintf(indice, "%d", indicePergunta);
