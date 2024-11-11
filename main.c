@@ -447,12 +447,17 @@ int main(void) {
 
                     if (respostaSelecionada != perguntaAtual->resposta) {
                         removerVida(&vidas);
-                        if (contarVidas(vidas) == 0) {
+                        int vidasRestantes = contarVidas(vidas);
+                        if (vidasRestantes == 0) {
                             jogoAcabou = true; // Para o temporizador
                             screen = 4; 
                         } else {
                             showHeadShark = true;
-                            sharkPosX += SCREEN_WIDTH * 0.1f; // Movimenta o tubarão 10% da largura da tela
+                            if (vidasRestantes == 2) {
+                                sharkPosX += SCREEN_WIDTH * 0.25f; // Movimenta o tubarão 25% da largura da tela
+                            } else if (vidasRestantes == 1) {
+                                sharkPosX += SCREEN_WIDTH * 0.25f; // Movimenta o tubarão 50% da largura da tela
+                            }
                         }
                     }
 
