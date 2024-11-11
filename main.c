@@ -192,7 +192,7 @@ void exibirInstrucoes() {
     DrawText("1. Escolha uma alternativa para cada pergunta.", 100, 100, 20, BLACK);
     DrawText("2. Responda todas as perguntas certas o mais rápido possível, \n se você não responder nenhuma, game over.\n", 100, 140, 20, BLACK);
     DrawText("3. O tempo total será usado para o ranking.", 100, 180, 20, BLACK);
-    DrawText("Pressione ENTER para voltar ao menu", 100, 500, 20, DARKGRAY);
+    DrawText("Pressione ENTER para voltar ao igreja", 100, 500, 20, DARKGRAY);
 }
 
 int main(void) {
@@ -214,15 +214,27 @@ int main(void) {
     }
 
     // Carrega a imagem de fundo
-    Texture2D background = LoadTexture("imgs/image.png");
-    if (background.id == 0) {
-        printf("Erro ao carregar a imagem de fundo\n");
+    Texture2D mar1 = LoadTexture("imgs/mar1.png");
+    if (mar1.id == 0) {
+        printf("Erro ao carregar a imagem do mar1\n");
         return 1;
     }
 
-    Texture2D menu = LoadTexture("imgs/menu.png");
-    if (menu.id == 0) {
-        printf("Erro ao carregar a imagem do mar\n");
+    Texture2D mar2 = LoadTexture("imgs/mar2.png");
+    if (mar2.id == 0) {
+        printf("Erro ao carregar a imagem do mar2\n");
+        return 1;
+    }
+
+    Texture2D mar3 = LoadTexture("imgs/mar3.png");
+    if (mar3.id == 0) {
+        printf("Erro ao carregar a imagem do mar3\n");
+        return 1;
+    }
+
+    Texture2D igreja = LoadTexture("imgs/igreja.png");
+    if (igreja.id == 0) {
+        printf("Erro ao carregar a imagem da igreja\n");
         return 1;
     }
 
@@ -290,7 +302,7 @@ int main(void) {
         ClearBackground(RAYWHITE);
 
         if (screen == 0) {
-            DrawTexture(menu, 0, 0, WHITE);
+            DrawTexture(igreja, 0, 0, WHITE);
             DrawTexture(logo, centerX(logo.width), centerY(logo.height) - 200, WHITE);
             
             Rectangle buttonPlay = { centerX(200), centerY(50) - 100, 200, 50 };
@@ -351,7 +363,7 @@ int main(void) {
         }
 
         if (screen == 1) {
-            DrawTexture(menu, 0, 0, WHITE);
+            DrawTexture(igreja, 0, 0, WHITE);
             DrawText("Digite seu nome:", centerX(400), centerY(40) - 200, 40, DARKBLUE);
             DrawText(nomeJogador, centerX(400), centerY(40) - 100, 40, DARKBLUE);
             DrawText("Pressione Enter para começar!", centerX(400), centerY(20) + 300, 20, BLACK);
@@ -381,7 +393,7 @@ int main(void) {
             
         } else if (screen == 2) {
             // Desenha a imagem de fundo
-            DrawTexture(background, 0, 0, WHITE);
+            DrawTexture(mar1, 0, 0, WHITE);
 
             // Converte o indice da pergunta para string, para poder imprimir na tela
             char indice[12];
@@ -464,17 +476,17 @@ int main(void) {
                 }
             }
         } else if (screen == 3) {
-            DrawTexture(background, 0, 0, WHITE);
+            DrawTexture(mar1, 0, 0, WHITE);
             exibirRanking(ranking, numJogadores);
-            DrawText("Pressione ENTER para voltar ao menu", centerX(400), centerY(20) + 300, 20, LIGHTGRAY);
+            DrawText("Pressione ENTER para voltar ao igreja", centerX(400), centerY(20) + 300, 20, LIGHTGRAY);
             if (IsKeyPressed(KEY_ENTER)) {
                 screen = 0; 
             }
 
         } else if (screen == 4) {
-            DrawTexture(background, 0, 0, WHITE);
+            DrawTexture(mar1, 0, 0, WHITE);
             DrawText("Game Over! Você perdeu todas as suas vidas.", 100, 100, 20, BLACK);
-            DrawText("Pressione ENTER para voltar ao menu", centerX(400), centerY(20) + 300, 20, BLACK);
+            DrawText("Pressione ENTER para voltar ao igreja", centerX(400), centerY(20) + 300, 20, BLACK);
 
             if (IsKeyPressed(KEY_ENTER)) {
                 screen = 0; 
@@ -493,9 +505,9 @@ int main(void) {
     UnloadTexture(heart);
 
     // Libera a textura da imagem de fundo
-    UnloadTexture(background);
+    UnloadTexture(mar1);
 
-    UnloadTexture(menu);
+    UnloadTexture(igreja);
 
     // Libera a memória alocada para as perguntas
     liberarPerguntas(head);
