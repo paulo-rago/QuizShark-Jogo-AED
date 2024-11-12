@@ -503,8 +503,8 @@ int main(void) {
                 DrawTexture(shark, sharkPosX, SCREEN_HEIGHT - shark.height - 50, WHITE);
             }
 
-            // Desenha a imagem extra a +10% de distância do tubarão
-            float girl1PosX = sharkPosX + SCREEN_WIDTH * 0.10f;
+            // Desenha a imagem extra a +25% de distância do tubarão
+            float girl1PosX = sharkPosX + SCREEN_WIDTH * 0.25f;
             if (showGirl2) {
                 DrawTexture(girl2, girl1PosX, SCREEN_HEIGHT - girl2.height - 50, WHITE);
                 girl2Timer += GetFrameTime();
