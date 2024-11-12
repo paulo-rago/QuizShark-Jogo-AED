@@ -196,7 +196,7 @@ void exibirInstrucoes() {
     DrawText("Pressione ENTER para voltar ao igreja", 100, 500, 20, DARKGRAY);
 }
 
-void exibirNovaTela(Texture2D igreja) {
+void exibirNovaTela(Texture2D igreja, Texture2D girl3) {
     ClearBackground(RAYWHITE);
     DrawTexture(igreja, 0, 0, WHITE);
 
@@ -207,6 +207,9 @@ void exibirNovaTela(Texture2D igreja) {
     int fontSize = 60;
     int lineSpacing = fontSize + 10; // Adjust line spacing to be consistent with font size
     DrawText("Parabéns!!!", centerX(600), centerY(120), fontSize, rainbowColors[colorIndex]);
+
+    // Draw girl3 texture in the bottom left corner
+    DrawTexture(girl3, 0, SCREEN_HEIGHT - girl3.height, WHITE);
 }
 
 int main(void) {
@@ -276,6 +279,11 @@ int main(void) {
         return 1;
     }
 
+    Texture2D girl3 = LoadTexture("imgs/girl3.png");
+    if(girl3.id == 0) {
+        printf("Erro ao carregar a imagem extra\n");
+        return 1;
+    }
 
     // Define o FPS alvo para uma contagem de tempo mais precisa
     SetTargetFPS(60);
@@ -537,7 +545,7 @@ int main(void) {
                 }
             }
         } else if (screen == 6) {
-            exibirNovaTela(igreja);
+            exibirNovaTela(igreja, girl3);
             newScreenTimer += GetFrameTime();
             if (newScreenTimer >= 5.0f) {
                 screen = 3; // Go to ranking screen after 5 seconds
@@ -568,7 +576,7 @@ int main(void) {
                 screen = 0; 
             }
         } else if (screen == 6) {
-            exibirNovaTela(igreja);
+            exibirNovaTela(igreja, girl3);
             if (IsKeyPressed(KEY_ENTER)) {
                 screen = 0; 
             }
@@ -585,6 +593,8 @@ int main(void) {
     UnloadTexture(igreja);
 
     UnloadTexture(girl1);
+
+    UnloadTexture(girl3);
 
     // Libera a memória alocada para as perguntas
     liberarPerguntas(head);
