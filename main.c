@@ -190,11 +190,15 @@ void exibirRanking(Jogador ranking[], int numJogadores) {
 void exibirInstrucoes(Texture2D igreja) {
     ClearBackground(RAYWHITE);
     DrawTexture(igreja, 0, 0, WHITE);
-    DrawText("Instruções:", 100, 50, 30, DARKBLUE);
-    DrawText("1. Escolha uma alternativa para cada pergunta.", 100, 100, 20, BLACK);
-    DrawText("2. Responda todas as perguntas certas o mais rápido possível, \n se você não responder nenhuma, game over.\n", 100, 140, 20, BLACK);
-    DrawText("3. O tempo total será usado para o ranking.", 100, 180, 20, BLACK);
-    DrawText("Pressione ENTER para voltar ao igreja", 100, 500, 20, DARKGRAY);
+    DrawRectangle(centerX(480), 300, 550, 200, BLACK);
+
+    DrawText("Instruções:", centerX(330), centerY(100) - 180, 50, WHITE);
+    DrawText("1. Escolha uma alternativa para cada pergunta.", centerX(400), centerY(20) - 100, 20, WHITE);
+    DrawText("2. Responda todas as perguntas certas o mais ", centerX(400), centerY(20) - 60, 20, WHITE);
+    DrawText("   rápido possível, se você não responder ", centerX(400), centerY(20) - 40, 20, WHITE);
+    DrawText("   nenhuma, game over.", centerX(400), centerY(20) - 20, 20, WHITE);
+    DrawText("3. O tempo total será usado para o ranking.", centerX(400), centerY(0), 20, WHITE);
+    DrawText("Pressione ENTER para voltar ao menu", centerX(400), centerY(20) + 300, 20, DARKGRAY);
 }
 
 void exibirNovaTela(Texture2D igreja, Texture2D girl3) {
