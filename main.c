@@ -292,12 +292,34 @@ int main(void) {
     Pergunta *head = NULL;
     adicionarPergunta(&head, ". Qual é a localização da Igrejinha de Piedade?", " a) Recife", " b) Jaboatão dos Guararapes", " c) Olinda", 'B', 40);
     adicionarPergunta(&head, ". Em que século foi fundada a Igrejinha de Piedade?", " a) Século XVI", " b) Século XVII", " c) Século XVIII", 'B', 40);
-    adicionarPergunta(&head, ". Qual é o estilo arquitetônico da Igrejinha de Piedade?", " a) Barroco", " b) Neoclássico", " c) Maneirista", 'C', 30);
-    adicionarPergunta(&head, ". Qual é a importância da Igrejinha de Piedade?", " a) É um ponto turístico", " b) É um local histórico", " c) Não tem importância", 'B', 30);
-    adicionarPergunta(&head, ". Por que a Igrejinha de Piedade é considerada \n\n ponto crítico para incidentes com tubarões?", " a) Pela poluição da água", " b) Devido à abertura nos arrecifes", " c) Por causa da pesca excessiva", 'B', 30);
-    adicionarPergunta(&head, ". Que medidas as autoridades têm tomado para lidar com \n\n os ataques de tubarão nas praias perto da Igrejinha de Piedade?", " a) Aumentar a fiscalização", " b) Proibir o banho de mar", " c) Construir barreiras", 'A', 30);
-    adicionarPergunta(&head, ". Qual é a relevância da Igrejinha de Piedade \n\n no contexto histórico e social de Pernambuco?", " a) É um ponto de referência para turistas apenas", " b) Está ligada ao ciclo da cana-de-açúcar", " c) Não possui relevância histórica", 'B', 30);
-    adicionarPergunta(&head, ". Qual foi a ação recomendada por especialistas em \n\n resposta ao aumento de ataques de tubarão em Piedade?", " a) Construir barreiras no mar", " b) Implantar restrições de banho em áreas de risco", " c) Organizar campanhas de conscientização", 'B', 30);
+    adicionarPergunta(&head, ". Qual é o estilo arquitetônico\n\n da Igrejinha de Piedade?", " a) Barroco", " b) Neoclássico", " c) Maneirista", 'C', 30);
+    adicionarPergunta(&head, ". Qual é a importância\n\n da Igrejinha de Piedade?", " a) É um ponto turístico", " b) É um local histórico", " c) Não tem importância", 'B', 30);
+    adicionarPergunta(&head, ". Por que a Igrejinha de Piedade\n\n é considerada ponto crítico para\n\n incidentes com tubarões?", " a) Pela poluição da água", " b) Devido à abertura nos arrecifes", " c) Por causa da pesca excessiva", 'B', 30);
+    adicionarPergunta(&head, ". Que medidas as autoridades têm\n\n tomado para lidar com os ataques\n\n de tubarão nas praias perto\n\n da Igrejinha de Piedade?", " a) Aumentar a fiscalização", " b) Proibir o banho de mar", " c) Construir barreiras", 'A', 30);
+    adicionarPergunta(&head, ". Qual é a relevância da Igrejinha\n\n de Piedade no contexto histórico\n\n e social de Pernambuco?", " a) É um ponto de referência para turistas apenas", " b) Está ligada ao ciclo da cana-de-açúcar", " c) Não possui relevância histórica", 'B', 30);
+    adicionarPergunta(&head, ". Qual foi a ação recomendada por\n\n especialistas em resposta ao\n\n aumento de ataques de tubarão\n\n em Piedade?", " a) Construir barreiras no mar", " b) Implantar restrições de banho em áreas de risco", " c) Organizar campanhas de conscientização", 'B', 30);
+    adicionarPergunta(&head, ". Em que ano a Igrejinha de Piedade\n\n foi tombada como patrimônio\n\n histórico?", " a) 1938", " b) 1975", " c) 1986", 'A', 40);
+    adicionarPergunta(&head, ". Qual é a denominação religiosa\n\n da Igrejinha de Piedade?", " a) Católica", " b) Protestante", " c) Ortodoxa", 'A', 30);
+    adicionarPergunta(&head, ". Em que estilo arquitetônico\n\n predomina a Igrejinha de Piedade?", " a) Gótico", " b) Barroco", " c) Colonial", 'C', 30);
+    adicionarPergunta(&head, ". Qual evento histórico está\n\n associado à construção da\n\n Igrejinha de Piedade?", " a) Primeira Missa no Brasil", " b) Ciclo do Ouro", " c) Ciclo da Cana-de-Açúcar", 'C', 30);
+    adicionarPergunta(&head, ". Qual elemento natural próximo\n\n aumenta o risco de ataques de\n\n tubarão na área?", " a) Falta de arrecifes", " b) Abertura nos arrecifes", " c) Corais grandes", 'B', 30);
+    adicionarPergunta(&head, ". A Igrejinha de Piedade é um ponto\n\n de referência para qual tipo\n\n de visitante?", " a) Pescadores locais", " b) Turistas e historiadores", " c) Apenas religiosos", 'B', 30);
+    adicionarPergunta(&head, ". Qual fator ambiental agravou\n\n o risco de ataques de tubarão\n\n nas proximidades?", " a) Pesca predatória", " b) Construção de portos", " c) Falta de fiscalização", 'B', 40);
+    adicionarPergunta(&head, ". Qual dos seguintes eventos é\n\n comum próximo à Igrejinha de\n\n Piedade?", " a) Romarias religiosas", " b) Competições de surfe", " c) Corridas de barco", 'A', 30);
+    adicionarPergunta(&head, ". Qual é o principal material\n\n utilizado na construção da\n\n Igrejinha de Piedade?", " a) Concreto armado", " b) Pedra calcária", " c) Madeira", 'B', 30);
+    adicionarPergunta(&head, ". Quem é a santa homenageada pela\n\n Igrejinha de Piedade?", " a) Santa Luzia", " b) Nossa Senhora da Piedade", " c) Santa Clara", 'B', 30);
+    adicionarPergunta(&head, ". Qual é o papel cultural da\n\n Igrejinha de Piedade para a\n\n comunidade local?", " a) Apenas lugar de culto", " b) Ponto turístico e histórico", " c) Local para casamentos", 'B', 30);
+    adicionarPergunta(&head, ". A presença de quais espécies de\n\n tubarão é mais comum na área\n\n de Piedade?", " a) Tubarão-tigre", " b) Tubarão-lixa", " c) Tubarão-martelo", 'A', 40);
+    adicionarPergunta(&head, ". Qual ação é desencorajada pelos\n\n locais devido ao risco de tubarões?", " a) Nadar em águas profundas", " b) Pescar próximo à costa", " c) Fazer mergulho", 'A', 30);
+    adicionarPergunta(&head, ". Qual é o nome da praia onde a\n\n Igrejinha de Piedade está\n\n localizada?", " a) Praia de Boa Viagem", " b) Praia de Piedade", " c) Praia do Paiva", 'B', 30);
+    adicionarPergunta(&head, ". Qual organização é responsável\n\n pela preservação da Igrejinha\n\n de Piedade?", " a) IPHAN", " b) IBAMA", " c) UNESCO", 'A', 30);
+    adicionarPergunta(&head, ". Quais ações foram sugeridas para\n\n reduzir o impacto ambiental na\n\n região da Igrejinha?", " a) Plantio de árvores", " b) Redução do turismo", " c) Construção de barreiras artificiais", 'C', 30);
+    adicionarPergunta(&head, ". A construção da Igrejinha de\n\n Piedade foi inspirada em qual\n\n estilo europeu?", " a) Italiano", " b) Espanhol", " c) Português", 'C', 40);
+    adicionarPergunta(&head, ". Qual é uma das tradições\n\n religiosas que ocorrem na\n\n Igrejinha de Piedade?", " a) Festa do Divino", " b) Festa da Padroeira", " c) Círio de Nazaré", 'B', 30);
+    adicionarPergunta(&head, ". Qual o tipo de solo que cerca a\n\n área da Igrejinha de Piedade?", " a) Areia e argila", " b) Pedra calcária", " c) Basalto", 'A', 30);
+    adicionarPergunta(&head, ". Qual característica torna a\n\n Igrejinha de Piedade única\n\n na região?", " a) Estilo arquitetônico incomum", " b) Construção em área urbana", " c) Construída sobre um penhasco", 'A', 40);
+
+
 
     Pergunta *perguntaAtual = head;
 
