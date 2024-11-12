@@ -196,6 +196,19 @@ void exibirInstrucoes() {
     DrawText("Pressione ENTER para voltar ao igreja", 100, 500, 20, DARKGRAY);
 }
 
+void exibirNovaTela(Texture2D igreja) {
+    ClearBackground(RAYWHITE);
+    DrawTexture(igreja, 0, 0, WHITE);
+
+    static int colorIndex = 0;
+    static Color rainbowColors[] = { RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE };
+    colorIndex = (colorIndex + 1) % (sizeof(rainbowColors) / sizeof(rainbowColors[0]));
+
+    int fontSize = 60;
+    int lineSpacing = fontSize + 10; // Adjust line spacing to be consistent with font size
+    DrawText("Parabéns!!!", centerX(600), centerY(120), fontSize, rainbowColors[colorIndex]);
+}
+
 int main(void) {
     // Inicializa a janela
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "QuizShark");
@@ -284,6 +297,7 @@ int main(void) {
     int screen = 0;
     float timer = 0.0f;
     float totalTime = 0.0f;
+    float newScreenTimer = 0.0f; // Timer for the new screen
     int perguntasRespondidas = 0;
     bool jogoAcabou = false;
     int indicePergunta = 1; 
@@ -507,7 +521,7 @@ int main(void) {
                     perguntasRespondidas++;
                     indicePergunta++; 
                     if (perguntasRespondidas == 8) {
-                        screen = 3; 
+                        screen = 6; 
                         jogoAcabou = true; // Para o temporizador
 
                         // Adiciona o jogador atual ao ranking e ordena
@@ -522,14 +536,20 @@ int main(void) {
                     }
                 }
             }
+        } else if (screen == 6) {
+            exibirNovaTela(igreja);
+            newScreenTimer += GetFrameTime();
+            if (newScreenTimer >= 5.0f) {
+                screen = 3; // Go to ranking screen after 5 seconds
+                newScreenTimer = 0.0f;
+            }
         } else if (screen == 3) {
             DrawTexture(mar1, 0, 0, WHITE);
             exibirRanking(ranking, numJogadores);
-            DrawText("Pressione ENTER para voltar ao igreja", centerX(400), centerY(20) + 300, 20, LIGHTGRAY);
+            DrawText("Pressione ENTER para continuar", centerX(400), centerY(20) + 300, 20, LIGHTGRAY);
             if (IsKeyPressed(KEY_ENTER)) {
                 screen = 0; 
             }
-
         } else if (screen == 4) {
             DrawTexture(mar1, 0, 0, WHITE);
             sharkPosX = SCREEN_WIDTH * 0.75f; // Posiciona o tubarão em 75% da largura da tela
@@ -544,6 +564,11 @@ int main(void) {
            
         } else if (screen == 5) {
             exibirInstrucoes();
+            if (IsKeyPressed(KEY_ENTER)) {
+                screen = 0; 
+            }
+        } else if (screen == 6) {
+            exibirNovaTela(igreja);
             if (IsKeyPressed(KEY_ENTER)) {
                 screen = 0; 
             }
