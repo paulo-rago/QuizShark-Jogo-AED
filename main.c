@@ -187,8 +187,9 @@ void exibirRanking(Jogador ranking[], int numJogadores) {
     }
 }
 
-void exibirInstrucoes() {
+void exibirInstrucoes(Texture2D igreja) {
     ClearBackground(RAYWHITE);
+    DrawTexture(igreja, 0, 0, WHITE);
     DrawText("Instruções:", 100, 50, 30, DARKBLUE);
     DrawText("1. Escolha uma alternativa para cada pergunta.", 100, 100, 20, BLACK);
     DrawText("2. Responda todas as perguntas certas o mais rápido possível, \n se você não responder nenhuma, game over.\n", 100, 140, 20, BLACK);
@@ -205,7 +206,6 @@ void exibirNovaTela(Texture2D igreja, Texture2D girl3) {
     colorIndex = (colorIndex + 1) % (sizeof(rainbowColors) / sizeof(rainbowColors[0]));
 
     int fontSize = 60;
-    int lineSpacing = fontSize + 10; // Adjust line spacing to be consistent with font size
     DrawText("Parabéns!!!", centerX(600), centerY(120), fontSize, rainbowColors[colorIndex]);
 
     // Draw girl3 texture in the bottom left corner
@@ -404,8 +404,8 @@ int main(void) {
 
         if (screen == 1) {
             DrawTexture(igreja, 0, 0, WHITE);
-            DrawText("Digite seu nome:", centerX(400), centerY(40) - 200, 40, DARKBLUE);
-            DrawText(nomeJogador, centerX(400), centerY(40) - 100, 40, DARKBLUE);
+            DrawText("Digite seu nome:", centerX(400), centerY(40) - 200, 40, BLACK);
+            DrawText(nomeJogador, centerX(400), centerY(40) - 100, 40, BLACK);
             DrawText("Pressione Enter para começar!", centerX(400), centerY(20) + 300, 20, BLACK);
 
             // Captura a entrada do teclado para o nome do jogador
@@ -571,7 +571,7 @@ int main(void) {
             }
            
         } else if (screen == 5) {
-            exibirInstrucoes();
+            exibirInstrucoes(igreja);
             if (IsKeyPressed(KEY_ENTER)) {
                 screen = 0; 
             }
