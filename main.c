@@ -192,7 +192,7 @@ void exibirInstrucoes(Texture2D igreja) {
     DrawTexture(igreja, 0, 0, WHITE);
     DrawRectangle(centerX(480), 300, 550, 200, BLACK);
 
-    DrawText("Instruções:", centerX(330), centerY(100) - 180, 50, WHITE);
+    DrawText("Instruções:", centerX(330), centerY(100) - 180, 50, BLACK);
     DrawText("1. Escolha uma alternativa para cada pergunta.", centerX(400), centerY(20) - 100, 20, WHITE);
     DrawText("2. Responda todas as perguntas certas o mais ", centerX(400), centerY(20) - 60, 20, WHITE);
     DrawText("   rápido possível, se você não responder ", centerX(400), centerY(20) - 40, 20, WHITE);
@@ -296,8 +296,8 @@ int main(void) {
     Pergunta *head = NULL;
     adicionarPergunta(&head, ". Qual é a localização da Igrejinha de Piedade?", " a) Recife", " b) Jaboatão dos Guararapes", " c) Olinda", 'B', 40);
     adicionarPergunta(&head, ". Em que século foi fundada a Igrejinha de Piedade?", " a) Século XVI", " b) Século XVII", " c) Século XVIII", 'B', 40);
-    adicionarPergunta(&head, ". Qual é o estilo arquitetônico\n\n da Igrejinha de Piedade?", " a) Barroco", " b) Neoclássico", " c) Maneirista", 'C', 30);
-    adicionarPergunta(&head, ". Qual é a importância\n\n da Igrejinha de Piedade?", " a) É um ponto turístico", " b) É um local histórico", " c) Não tem importância", 'B', 30);
+    adicionarPergunta(&head, ". Qual é o estilo arquitetônico da Igrejinha de Piedade?", " a) Barroco", " b) Neoclássico", " c) Maneirista", 'C', 30);
+    adicionarPergunta(&head, ". Qual é a importância da Igrejinha de Piedade?", " a) É um ponto turístico", " b) É um local histórico", " c) Não tem importância", 'B', 30);
     adicionarPergunta(&head, ". Por que a Igrejinha de Piedade\n\n é considerada ponto crítico para\n\n incidentes com tubarões?", " a) Pela poluição da água", " b) Devido à abertura nos arrecifes", " c) Por causa da pesca excessiva", 'B', 30);
     adicionarPergunta(&head, ". Que medidas as autoridades têm\n\n tomado para lidar com os ataques\n\n de tubarão nas praias perto\n\n da Igrejinha de Piedade?", " a) Aumentar a fiscalização", " b) Proibir o banho de mar", " c) Construir barreiras", 'A', 30);
     adicionarPergunta(&head, ". Qual é a relevância da Igrejinha\n\n de Piedade no contexto histórico\n\n e social de Pernambuco?", " a) É um ponto de referência para turistas apenas", " b) Está ligada ao ciclo da cana-de-açúcar", " c) Não possui relevância histórica", 'B', 30);
@@ -588,8 +588,8 @@ int main(void) {
             DrawTexture(mar1, 0, 0, WHITE);
             sharkPosX = SCREEN_WIDTH * 0.75f; // Posiciona o tubarão em 75% da largura da tela
             DrawTexture(shark, sharkPosX, SCREEN_HEIGHT - shark.height - 50, WHITE);
-            DrawText("Game Over! Você perdeu todas as suas vidas.", 100, 100, 20, BLACK);
-            DrawText("Pressione ENTER para voltar ao igreja", centerX(400), centerY(20) + 300, 20, BLACK);
+            DrawText("Game Over!", centerX(250), centerY(100) - 180, 50, BLACK);
+            DrawText("Pressione ENTER para voltar ao igreja", centerX(400), centerY(20) + 300, 20, LIGHTGRAY);
 
             if (IsKeyPressed(KEY_ENTER)) {
                 screen = 0; 
