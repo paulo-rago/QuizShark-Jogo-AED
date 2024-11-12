@@ -74,6 +74,7 @@ Pergunta* perguntaAleatoria(Pergunta *head) {
         return NULL;
     }
 
+
     Pergunta *perguntaSelecionada = NULL;
     do {
         int indiceAleatorio = rand() % totalPerguntas; // Gera um número entre 0 e totalPerguntas-1
@@ -250,6 +251,19 @@ int main(void) {
         return 1;
     }
  
+    Texture2D girl1 = LoadTexture("imgs/girl1.png");
+    if (girl1.id == 0) {
+        printf("Erro ao carregar a imagem extra\n");
+        return 1;
+    }
+
+    Texture2D girl2 = LoadTexture("imgs/girl2.png");
+    if (girl2.id == 0) {
+        printf("Erro ao carregar a imagem extra\n");
+        return 1;
+    }
+
+
     // Define o FPS alvo para uma contagem de tempo mais precisa
     SetTargetFPS(60);
 
@@ -290,6 +304,10 @@ int main(void) {
     float sharkPosX = 0;
     bool showHeadShark = false;
     float headSharkTimer = 0.0f;
+    bool showGirl1 = false;
+    float girl1Timer = 0.0f;
+    bool showGirl2 = false;
+    float girl2Timer = 0.0f;
 
     while (!WindowShouldClose()) {
         // Atualiza o timer
@@ -437,6 +455,27 @@ int main(void) {
                 DrawTexture(shark, sharkPosX, SCREEN_HEIGHT - shark.height - 50, WHITE);
             }
 
+            // Desenha a imagem extra a +10% de distância do tubarão
+            float girl1PosX = sharkPosX + SCREEN_WIDTH * 0.10f;
+            if (showGirl2) {
+                DrawTexture(girl2, girl1PosX, SCREEN_HEIGHT - girl2.height - 50, WHITE);
+                girl2Timer += GetFrameTime();
+                if (girl2Timer >= 4.0f) {
+                    showGirl2 = false;
+                    girl2Timer = 0.0f;
+                }
+            } else if (showGirl1) {
+                DrawTexture(girl1, girl1PosX, SCREEN_HEIGHT - girl1.height - 50, WHITE);
+                girl1Timer += GetFrameTime();
+                if (girl1Timer >= 4.0f) {
+                    showGirl1 = false;
+                    girl1Timer = 0.0f;
+                }
+            } else {
+                DrawTexture(girl1, girl1PosX, SCREEN_HEIGHT - girl1.height - 50, WHITE);
+            }
+
+
             // Lógica para marcar a pergunta como respondida e passar para a próxima
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 Vector2 mousePoint = GetMousePosition();
@@ -454,6 +493,8 @@ int main(void) {
                             screen = 4; 
                         } else {
                             showHeadShark = true;
+                            showGirl1 = true;
+                            showGirl2 = true;
                             if (vidasRestantes == 2) {
                                 sharkPosX += SCREEN_WIDTH * 0.25f; // Movimenta o tubarão 25% da largura da tela
                             } else if (vidasRestantes == 1) {
@@ -517,6 +558,8 @@ int main(void) {
     UnloadTexture(mar1);
 
     UnloadTexture(igreja);
+
+    UnloadTexture(girl1);
 
     // Libera a memória alocada para as perguntas
     liberarPerguntas(head);
